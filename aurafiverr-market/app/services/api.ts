@@ -7,16 +7,18 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig<any>) => {
+    if (typeof window !== "undefined") {
     const userAdmin = localStorage.getItem("USER_ADMIN");
     const userLogin = localStorage.getItem("USER_LOGIN");
 
     const adminToken = userAdmin ? JSON.parse(userAdmin).accessToken : "";
-    const loginToken = userLogin ? JSON.parse(userLogin).accessToken : "";
-
-    config.headers["Authorization"] = `Bearer ${adminToken || loginToken}`
+    const loginToken = userLogin ? JSON.parse(userLogin).accessToken : "";  
+    
+    if (adminToken || loginToken) {
+        config.headers["Authorization"] = `Bearer ${adminToken || loginToken}`;
+        }
+    }
     config.headers["TokenCybersoft"] = TOKEN_CYBERSOFT
-
-    return config
-})
-
+    return config;
+});
 export default api
