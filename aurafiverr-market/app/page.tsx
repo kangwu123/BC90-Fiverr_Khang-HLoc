@@ -12,12 +12,14 @@ import {
   AudioOutlined,
   BulbOutlined,
   CodeOutlined,
+  CoffeeOutlined,
   FormatPainterOutlined,
-  RobotOutlined,
   ShopOutlined,
-  TeamOutlined,
+  AuditOutlined,
   TranslationOutlined,
   VideoCameraOutlined,
+  CheckCircleOutlined,
+  HeartOutlined,
 } from "@ant-design/icons";
 
 import HomeHeader from "./components/HomeHeader";
@@ -36,10 +38,10 @@ export default function Home() {
     { name: "Digital Marketing", icon: <BulbOutlined className="text-3xl" /> },
     { name: "Writing & Translation", icon: <TranslationOutlined className="text-3xl" /> },
     { name: "Video & Animation", icon: <VideoCameraOutlined className="text-3xl" /> },
-    { name: "AI Services", icon: <RobotOutlined className="text-3xl" /> },
+    { name: "Lifestyle", icon: <CoffeeOutlined className="text-3xl" /> },
     { name: "Music & Audio", icon: <AudioOutlined className="text-3xl" /> },
     { name: "Business", icon: <ShopOutlined className="text-3xl" /> },
-    { name: "Consulting", icon: <TeamOutlined className="text-3xl" /> },
+    { name: "Data", icon: <AuditOutlined className="text-3xl" /> },
   ];
 
   const popularServices = [
@@ -85,6 +87,84 @@ export default function Home() {
     { name: "Email Marketing", image: "/img/Trusted/Email-Marketing_2x.png" },
     { name: "Press Releases", image: "/img/Trusted/Press-Releases_2x.png" },
     { name: "Logo Design", image: "/img/Trusted/Logo-Design_2x.png" },
+  ];
+
+  const madeOnFiverr = [
+    {
+      img: "/img/MadeOnFiverr/1_InteractiveLightMix.jpg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/1.jpeg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/Appmockup.png",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/Enscape.png",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/F_1.jpg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/GIGreview.png",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/hero.jpg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/landscape.jpeg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/Mockup.jpg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/mockup2.jpg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/Revision2.png",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/mockup3.jpg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/tupp.png",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/Weddingnoword.png",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
+    {
+      img: "/img/MadeOnFiverr/IMG_7140.jpeg",
+      title: "Logo Design",
+      author: "by romisriyooo"
+    },
   ];
 
   useEffect(() => {
@@ -222,25 +302,8 @@ export default function Home() {
             )}
           </section>
 
-          <section className="w-full py-16 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex flex-wrap justify-center gap-6">
-                {categories.map((category) => (
-                  <div key={category.name} className="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out w-40 h-36 cursor-pointer group">
-                    <div className="text-gray-500 group-hover:text-amber-500 transition-colors duration-300">
-                      {category.icon}
-                    </div>
-                    <p className="text-sm font-medium text-gray-700 group-hover:text-black text-center mt-3 transition-colors duration-300">
-                      {category.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
           <section className="w-full py-10 bg-white px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 wow animate__animated animate__fadeInUp">
+            <h2 className="text-3xl text-teal-800 md:text-4xl font-bold text-center mb-16 wow animate__animated animate__fadeInUp">
               Popular Professional Services
             </h2>
 
@@ -283,8 +346,57 @@ export default function Home() {
             </div>
           </section>
 
+          <section className="w-full py-20 bg-[#f1fdf7]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col lg:flex-row items-center">
+                <div className="w-full lg:w-1/2 lg:pr-16">
+                  <h2 className="text-3xl md:text-4xl font-bold text-[#0d472d] mb-8">
+                    A whole world of freelance talent at your fingertips
+                  </h2>
+                  <ul className="space-y-6">
+                    <li className="flex items-start">
+                      <CheckCircleOutlined className="text-gray-500 mr-4 mt-1 text-xl" />
+                      <div>
+                        <h3 className="font-bold text-lg text-gray-800">The best for every budget</h3>
+                        <p className="text-gray-600 mt-1">Find high-quality services at every price point. No hourly rates, just project-based pricing.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircleOutlined className="text-gray-500 mr-4 mt-1 text-xl" />
+                      <div>
+                        <h3 className="font-bold text-lg text-gray-800">Quality work done quickly</h3>
+                        <p className="text-gray-600 mt-1">Find the right freelancer to begin working on your project within minutes.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircleOutlined className="text-gray-500 mr-4 mt-1 text-xl" />
+                      <div>
+                        <h3 className="font-bold text-lg text-gray-800">Protected payments, every time</h3>
+                        <p className="text-gray-600 mt-1">Always know what you'll pay upfront. Your payment isn't released until you approve the work.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircleOutlined className="text-gray-500 mr-4 mt-1 text-xl" />
+                      <div>
+                        <h3 className="font-bold text-lg text-gray-800">24/7 support</h3>
+                        <p className="text-gray-600 mt-1">Questions? Our round-the-clock support team is available to help anytime, anywhere.</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div className="w-full lg:w-1/2 mt-10 lg:mt-0">
+                  <div className="relative">
+                    <video controls poster="/img/fiverrpro.mp4" className="rounded-lg w-full">
+                      <source src="/img/fiverrpro.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <section className="w-full py-10 bg-white px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 wow animate__animated animate__fadeInUp">
+            <h2 className="text-3xl text-teal-800 md:text-4xl font-bold text-center mb-14 wow animate__animated animate__fadeInUp">
               Vontélle’s trusted services
             </h2>
 
@@ -304,52 +416,118 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="w-full py-10 bg-gray-100 overflow-hidden">
-            <h3 className="text-xl text-gray-500 mb-16 uppercase tracking-[0.3em] font-medium text-center wow animate__animated animate__fadeInUp">
-              Our Partners
-            </h3>
+          {/* Testimonial Section */}
+          <section className="w-full py-20 bg-[#f1fdf7]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 -left-10 z-10">
+                <button className="bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+              </div>
 
-            <Swiper
-              modules={[Autoplay]}
-              slidesPerView="auto"
-              spaceBetween={80}
-              loop
-              speed={12000}
-              allowTouchMove={false}
-              autoplay={{ delay: 0, disableOnInteraction: false }}
-              className="w-full"
-            >
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/expedia.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/visa.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/mastercard.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/paypal.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/airbnb.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/expedia.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/visa.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/mastercard.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/paypal.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-              <SwiperSlide className="w-auto! flex items-center wow animate__animated animate__fadeIn">
-                <img src="/img/Partner/airbnb.png" className="h-10 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
-              </SwiperSlide>
-            </Swiper>
+              <div className="flex flex-col lg:flex-row items-center">
+                <div className="w-full lg:w-1/2 relative mb-8 lg:mb-0">
+                  <video controls poster="/img/testimonial-video-cover.mp4" className="rounded-lg w-full">
+                    <source src="/img/testimonial-video-cover.mp4" type="video/mp4" />
+                  </video>
+                </div>
+
+                <div className="w-full lg:w-1/2 lg:pl-24 text-center lg:text-left">
+                  <p className="text-lg text-gray-500">
+                    Kay Kim, Co-Founder | <span className="font-bold text-black">rooted</span>
+                  </p>
+                  <blockquote className="mt-4 text-3xl font-serif text-[#0d472d] italic leading-snug">
+                    "It's extremely exciting that Fiverr has freelancers from all over the world — it broadens the talent pool. One of the best things about Fiverr is that while we're sleeping, someone's working."
+                  </blockquote>
+                </div>
+              </div>
+              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 -right-10 z-10">
+                <button className="bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors">
+                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section className="w-full py-10 bg-gray-50">
+            <h2 className="text-3xl text-teal-800 md:text-4xl font-bold text-center mb-16 wow animate__animated animate__fadeInUp">
+              Explore the marketplace
+            </h2>
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-wrap justify-center gap-6">
+                {categories.map((category) => (
+                  <div key={category.name} className="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out w-40 h-36 cursor-pointer group">
+                    <div className="text-gray-500 group-hover:text-amber-500 transition-colors duration-300">
+                      {category.icon}
+                    </div>
+                    <p className="text-sm font-medium text-gray-700 group-hover:text-black text-center mt-3 transition-colors duration-300">
+                      {category.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="w-full py-10 bg-white px-6">
+            <div className="max-w-4xl mx-auto relative">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-gray-700">Made on AuraFiverr</h2>
+              </div>
+
+              <Swiper
+                modules={[Navigation, Pagination]}
+                navigation={{
+                  nextEl: ".made-on-fiverr-next",
+                  prevEl: ".made-on-fiverr-prev",
+                }}
+                pagination={{ clickable: true }}
+                spaceBetween={16}
+                slidesPerView={4}
+                className="made-on-fiverr-slider"
+              >
+                {madeOnFiverr.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative group overflow-hidden rounded-lg">
+                      <img src={item.img} alt={item.title} className="w-full h-auto object-cover rounded-lg" />
+                      <div className="absolute inset-0 bg-opacity-50 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <h3 className="text-red-600 font-bold">{item.title}</h3>
+                            <p className="text-amber-300 text-sm">{item.author}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button className="text-red-800 bg-opacity-25 rounded-full p-2">
+                          <HeartOutlined className="text-xl" />
+                        </button>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <div className="made-on-fiverr-prev absolute top-1/2 -translate-y-1/2 -left-10 z-10 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </div>
+              <div className="made-on-fiverr-next absolute top-1/2 -translate-y-1/2 -right-10 z-10 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </div>
+            </div>
+          </section>
+
+          <section className="w-full py-20 bg-green-800 text-amber-500">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-4xl font-bold mb-6">
+                Your business, your terms, your success
+              </h2>
+              <p className="text-xl mb-8">
+                AuraFiverr gives you the tools to build a business you're proud of
+              </p>
+              <button className="bg-white text-green-800 font-bold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
+                Get Started
+              </button>
+            </div>
           </section>
 
           <div className="relative bg-white">
