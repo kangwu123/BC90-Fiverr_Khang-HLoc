@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Aura Fivver Pro | Freelance Online Marketplace Connecting Platform",
   description: "Aura Fivver Pro is a short-term Freelance Online Marketplace Connecting Platform developed by Khang & HLoc.",
-  icons: { icon: "/image/fiverrfavicon.ico" },
+  icons: { icon: "/img/fiverrfavicon.ico" },
 };
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {

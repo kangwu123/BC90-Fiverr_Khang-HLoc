@@ -1,93 +1,183 @@
-import Link from "next/link"
-import React from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFacebook, faInstagram, faYoutube, faLinkedin } from "@fortawesome/free-brands-svg-icons"
+import Link from "next/link";
+import {
+    FaTwitter,
+    FaFacebook,
+    FaLinkedin,
+    FaPinterest,
+    FaInstagram,
+} from "react-icons/fa";
+import { FaThreads } from "react-icons/fa6";
+import { IoLanguage } from "react-icons/io5";
+import { FaDollarSign } from "react-icons/fa";
+import { FaAccessibleIcon } from "react-icons/fa";
 
 const HomeFooter = () => {
+    const categories = [
+        { name: "Graphics & Design", link: "#" },
+        { name: "Digital Marketing", link: "#" },
+        { name: "Writing & Translation", link: "#" },
+        { name: "Video & Animation", link: "#" },
+        { name: "Music & Audio", link: "#" },
+        { name: "Programming & Tech", link: "#" },
+        { name: "Data", link: "#" },
+        { name: "Business", link: "#" },
+        { name: "Lifestyle", link: "#" },
+        { name: "Sitemap", link: "#" },
+    ];
+
+    const about = [
+        { name: "Careers", link: "#" },
+        { name: "Press & News", link: "#" },
+        { name: "Partnerships", link: "#" },
+        { name: "Privacy Policy", link: "#" },
+        { name: "Terms of Service", link: "#" },
+        { name: "Intellectual Property Claims", link: "#" },
+        { name: "Investor Relations", link: "#" },
+    ];
+
+    const support = [
+        { name: "Help & Support", link: "#" },
+        { name: "Trust & Safety", link: "#" },
+        { name: "Selling on Aura Fiverr", link: "#" },
+        { name: "Buying on Aura Fiverr", link: "#" },
+    ];
+
+    const community = [
+        { name: "Community Standards", link: "#" },
+        { name: "Podcast", link: "#" },
+        { name: "Affiliates", link: "#" },
+        { name: "Invite a Friend", link: "#" },
+        { name: "Become a Seller", link: "#" },
+    ];
+
+    const moreFromFiverr = [
+        { name: "Aura Fiverr Business", link: "#" },
+        { name: "Aura Fiverr Pro", link: "#" },
+        { name: "Aura Fiverr Logo Maker", link: "#" },
+        { name: "Aura Fiverr Guides", link: "#" },
+        { name: "Get Inspired", link: "#" },
+        { name: "ClearVoice", link: "#" },
+        { name: "Aura Fiverr Workspace", link: "#" },
+        { name: "Learn", link: "#" },
+    ];
+
+    const socialLinks = [
+        { icon: <FaTwitter />, link: "#" },
+        { icon: <FaFacebook />, link: "#" },
+        { icon: <FaLinkedin />, link: "#" },
+        { icon: <FaPinterest />, link: "#" },
+        { icon: <FaInstagram />, link: "#" },
+        { icon: <FaThreads />, link: "#" },
+    ];
+
     return (
-        <footer className="bg-[#0D0F11] text-white w-full border-t border-white/5">
-            <div className="app-container mx-auto px-6 py-12 lg:py-20">
-                <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-16">
-                    <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-8 w-full lg:w-1/2 order-2 lg:order-1">
-                        <img src="/img/Logo.png" alt="Aura Fiverr Logo" className="w-40 md:w-48 brightness-110" />
-
-                        <div className="space-y-4">
-                            <p className="text-xs uppercase tracking-[0.3em] text-gray-500 font-bold">
-                                Connect with us
-                            </p>
-
-                            <div className="flex gap-4 sm:gap-6 justify-center lg:justify-start">
-                                <Link
-                                    href="#"
-                                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-400 transition-all duration-300 hover:bg-[#1877F2] hover:text-white hover:-translate-y-2"
-                                >
-                                    <FontAwesomeIcon icon={faFacebook} className="text-lg md:text-xl" />
-                                </Link>
-
-                                <Link
-                                    href="#"
-                                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-400 transition-all duration-300 hover:bg-[#E4405F] hover:text-white hover:-translate-y-2"
-                                >
-                                    <FontAwesomeIcon icon={faInstagram} className="text-lg md:text-xl" />
-                                </Link>
-
-                                <Link
-                                    href="#"
-                                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-400 transition-all duration-300 hover:bg-[#FF0000] hover:text-white hover:-translate-y-2"
-                                >
-                                    <FontAwesomeIcon icon={faYoutube} className="text-lg md:text-xl" />
-                                </Link>
-
-                                <Link
-                                    href="#"
-                                    className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-400 transition-all duration-300 hover:bg-[#0A66C2] hover:text-white hover:-translate-y-2"
-                                >
-                                    <FontAwesomeIcon icon={faLinkedin} className="text-lg md:text-xl" />
-                                </Link>
-                            </div>
-                        </div>
+        <footer className="bg-gray-100 text-gray-500">
+            <div className="container mx-auto px-4 py-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                    <div className="space-y-4">
+                        <h3 className="font-bold text-lg text-gray-800">Categories</h3>
+                        <ul className="space-y-2">
+                            {categories.map((item, index) => (
+                                <li key={index}>
+                                    <Link href={item.link} className="hover:text-gray-900 transition-colors">
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
-                    <div className="flex flex-col items-center lg:items-end text-center lg:text-right gap-6 w-full lg:w-1/2 order-1 lg:order-2">
-                        <div className="space-y-4">
-                            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-                                Join Find <span className="text-[#FF4B5C]">New Job</span>
-                            </h3>
-                            <p className="text-gray-400 text-sm md:text-base max-w-md leading-relaxed ml-auto">
-                                Subscribe to our newsletter to receive exclusive offers and the latest Job recruitment every week.
-                            </p>
-                        </div>
+                    <div className="space-y-4">
+                        <h3 className="font-bold text-lg text-gray-800">About</h3>
+                        <ul className="space-y-2">
+                            {about.map((item, index) => (
+                                <li key={index}>
+                                    <Link href={item.link} className="hover:text-gray-900 transition-colors">
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                        <div className="relative w-full max-w-md">
-                            <div className="flex flex-col sm:flex-row gap-2 p-1.5 bg-[#1A1D21] rounded-2xl border border-white/5 transition-all shadow-2xl">
-                                <input
-                                    type="email"
-                                    placeholder="Your email address..."
-                                    className="flex-1 px-4 py-3 bg-transparent text-white outline-none text-sm placeholder:text-gray-600"
-                                />
-                                <button className="px-6 py-3 rounded-xl bg-[#FF4B5C] font-bold text-sm transition-all duration-300 hover:bg-[#ff3245] hover:shadow-[0_0_15px_rgba(255,75,92,0.4)] active:scale-95">
-                                    Subscribe
-                                </button>
-                            </div>
-                        </div>
+                    <div className="space-y-4">
+                        <h3 className="font-bold text-lg text-gray-800">Support</h3>
+                        <ul className="space-y-2">
+                            {support.map((item, index) => (
+                                <li key={index}>
+                                    <Link href={item.link} className="hover:text-gray-900 transition-colors">
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                        <h3 className="font-bold text-lg text-gray-800">Community</h3>
+                        <ul className="space-y-2">
+                            {community.map((item, index) => (
+                                <li key={index}>
+                                    <Link href={item.link} className="hover:text-gray-900 transition-colors">
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                        <h3 className="font-bold text-lg text-gray-800">More From Aura Fiverr</h3>
+                        <ul className="space-y-2">
+                            {moreFromFiverr.map((item, index) => (
+                                <li key={index}>
+                                    <Link href={item.link} className="hover:text-gray-900 transition-colors">
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
 
-            <div className="py-8 border-t border-white/5 bg-black/30">
-                <div className="app-container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex gap-8 text-[10px] md:text-xs uppercase tracking-widest font-bold text-gray-500">
-                        <Link href="#" className="hover:text-[#FF4B5C] transition-colors">Privacy Policy</Link>
-                        <Link href="#" className="hover:text-[#FF4B5C] transition-colors">Terms & Conditions</Link>
+            <div className="border-t border-gray-200">
+                <div className="container mx-auto px-4 py-6 flex flex-wrap justify-between items-center">
+                    <div className="flex items-center space-x-4">
+                        <img src="/img/Logo.png" className="h-30 sm:h-15 object-contain" alt="Logo" />
                     </div>
-
-                    <div className="text-[10px] md:text-xs text-gray-600 font-medium">
-                        © 2026 AURA FIVERR. ALL RIGHTS RESERVED.
+                    <p className="text-sm text-gray-500">
+                            &copy; {new Date().getFullYear()} Aura Fiverr International Ltd.
+                    </p>
+                    <div className="flex items-center space-x-6">
+                        <div className="flex space-x-4">
+                            {socialLinks.map((social, index) => (
+                                <Link
+                                    key={index}
+                                    href={social.link}
+                                    className="text-gray-500 hover:text-gray-900 transition-colors"
+                                >
+                                    {social.icon}
+                                </Link>
+                            ))}
+                        </div>
+                        <div className="flex items-center space-x-4 text-sm">
+                            <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
+                                <IoLanguage />
+                                <span>English</span>
+                            </button>
+                            <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
+                                <FaDollarSign />
+                                <span>USD</span>
+                            </button>
+                            <button className="p-2 border rounded-full hover:bg-gray-200 transition-colors">
+                                <FaAccessibleIcon />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </footer>
-    )
-}
-
-export default HomeFooter
+    );
+};
+export default HomeFooter;
