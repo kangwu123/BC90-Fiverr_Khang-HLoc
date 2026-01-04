@@ -110,8 +110,8 @@ const HomeHeader = ({ isHome = false, homeAnimationDone = false }: HeaderProps) 
 
             <div className="hidden lg:block">
                 <Link href="/" className="cursor-pointer group">
-                    <div className="bg-[#C3DFE3] px-10 xl:px-14 py-3 xl:py-4 shadow-md [clip-path:polygon(0%_0%,100%_0%,80%_100%,20%_100%)]">
-                        <img src="/img/Logo.png" className="h-15 xl:h-15 mx-auto pointer-events-none" alt="Logo" />
+                <div className="bg-[#C3DFE3] px-10 xl:px-14 py-3 xl:py-4 shadow-md [clip-path:polygon(0%_0%,100%_0%,80%_100%,20%_100%)]">
+                        <img src="/img/Logo.png" className="h-10 xl:h-12 mx-auto pointer-events-none" alt="Logo" />
                     </div>
                 </Link>
             </div>
