@@ -27,10 +27,12 @@ import HomeFooter from "./components/HomeFooter";
 import BackToTopButton from "./components/BackToTop";
 //import DestinationBar from "./(pages)/destinationBar";
 import SocialMedia from "./components/SocialMedia";
+import StickyNav from "./components/StickyNav";
 
 export default function Home() {
   const [splashDone, setSplashDone] = useState(false);
   const [homeReady, setHomeReady] = useState(false);
+  const [isHeaderSticky, setIsHeaderSticky] = useState(false);
 
   const categories = [
     { name: "Programming & Tech", icon: <CodeOutlined className="text-3xl" /> },
@@ -178,6 +180,10 @@ export default function Home() {
 
     const t = setTimeout(() => setSplashDone(true), 80);
 
+    const header = document.querySelector("header");
+    if (header) {
+    }
+
     return () => {
       clearTimeout(t);
       wow = null;
@@ -209,11 +215,14 @@ export default function Home() {
         transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
         onAnimationComplete={() => setHomeReady(true)}
       >
-        <HomeHeader isHome homeAnimationDone={homeReady} />
 
+        <HomeHeader
+          isHome
+          homeAnimationDone={homeReady}
+          onStickyChange={setIsHeaderSticky}
+        />
         <main className="w-full">
-
-          <section className="relative h-screen">
+          <section id="hero-section" className="relative h-screen">
             <div className="absolute inset-0">
               <Swiper
                 modules={[Autoplay, Pagination]}
@@ -302,6 +311,7 @@ export default function Home() {
             )}
           </section>
 
+          <StickyNav headerHeight={isHeaderSticky ? 80 : 0} />
           <section className="w-full py-10 bg-white px-6">
             <h2 className="text-3xl text-teal-800 md:text-4xl font-bold text-center mb-16 wow animate__animated animate__fadeInUp">
               Popular Professional Services
