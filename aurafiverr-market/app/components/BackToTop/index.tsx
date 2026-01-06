@@ -35,6 +35,7 @@ const BackToTopButton = () => {
         } else {
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
+        window.dispatchEvent(new CustomEvent("hideStickyNav"));
     };
 
     return (
