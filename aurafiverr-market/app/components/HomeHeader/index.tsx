@@ -176,14 +176,13 @@ const HomeHeader = ({
                         exit={{ opacity: 0, y: 10 }}
                         className="flex items-center gap-2 xl:gap-6 font-semibold"
                     >
-                        <Link href="/about" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "#" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
+                        <Link href="#" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "#" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
                             Business
                         </Link>
-                        <Link href="/about" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "#" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"
+                        <Link href="#" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "#" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"
                             }`}>
                             Explore
                         </Link>
-
                         <Link href="#" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "#" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
                             <FontAwesomeIcon icon={faGlobe} />
                             English
@@ -352,7 +351,7 @@ const HomeHeader = ({
             {/* Toast Notification */}
             <AnimatePresence>
                 {showToast && (
-                    <div className="fixed top-[5%] left-0 w-full flex justify-center z-50 pointer-events-none">
+                    <div className="fixed top-[5%] left-0 w-full flex justify-center z-102 pointer-events-none">
                         <motion.div
                             initial={{ opacity: 0, y: -40 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -375,7 +374,7 @@ const HomeHeader = ({
                         <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             onClick={() => setIsMenuOpen(false)}
-                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden"
+                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-100 lg:hidden"
                         />
                         <motion.div
                             initial={{ x: "-100%" }}
@@ -394,12 +393,27 @@ const HomeHeader = ({
 
                             <nav className="flex flex-col gap-2">
                                 <Link
-                                    href="/about"
+                                    href="#"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "/about" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
+                                    className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "#" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
                                 >
-                                    About
+                                    Business
                                 </Link>
+                                <Link
+                                    href="#"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "#" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
+                                >
+                                    Explore
+                                </Link>
+                                <Link
+                                    href="#"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "#" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
+                                >
+                                    <FontAwesomeIcon icon={faGlobe} /> English
+                                </Link>
+                        
                                 <Link
                                     href="/seller"
                                     onClick={() => setIsMenuOpen(false)}
@@ -421,7 +435,7 @@ const HomeHeader = ({
                             initial={{ y: -60, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.6 }}
-                            className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 rounded-b-2xl sm:rounded-b-3xl lg:rounded-b-4xl xl:rounded-b-[2.5rem] ${showBg ? "bg-[#C3DFE3] shadow-md" : "bg-white/30 backdrop-blur-sm"
+                            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 rounded-b-2xl sm:rounded-b-3xl lg:rounded-b-4xl xl:rounded-b-[2.5rem] ${showBg ? "bg-[#C3DFE3] shadow-md" : "bg-white/30 backdrop-blur-sm"
                                 }`}
                         >
                             <div className="app-container mx-auto">
@@ -431,7 +445,7 @@ const HomeHeader = ({
                     )}
                 </AnimatePresence>
             ) : (
-                <header className="sticky top-0 z-40 bg-[#C3DFE3] shadow-md rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl lg:rounded-b-3xl xl:rounded-b-4xl">
+                <header className="sticky top-0 z-50 bg-[#C3DFE3] shadow-md rounded-b-lg sm:rounded-b-xl md:rounded-b-2xl lg:rounded-b-3xl xl:rounded-b-4xl">
                     <div className="app-container mx-auto">
                         {HeaderContent}
                     </div>
@@ -443,7 +457,7 @@ const HomeHeader = ({
                 {authModal && (
                     <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+                        className="fixed inset-0 z-102 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
                         onClick={() => setAuthModal(null)}
                     >
                         <div onClick={(e) => e.stopPropagation()} className="app-container mx-auto">
@@ -466,5 +480,4 @@ const HomeHeader = ({
         </>
     );
 };
-
 export default HomeHeader;
