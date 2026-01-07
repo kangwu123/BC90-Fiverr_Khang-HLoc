@@ -1,20 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-
-
-const categories = [
-    { name: "Graphics & Design" },
-    { name: "Digital Marketing", },
-    { name: "Writing & Translation", },
-    { name: "Video & Animation", },
-    { name: "Music & Audio",},
-    { name: "Testing",}
-];
+import { getJobMenu } from "@/app/services/job";
+import Link from "next/link";
 
 export default function StickyNav({ headerHeight }: { headerHeight: number }) {
     const [visible, setVisible] = useState(false);
+    const [categories, setCategories] = useState<any[]>([]);
+    const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
 
     useEffect(() => {
+        const fetchMenu = async () => {
+            try {
+                const menuData = await getJobMenu();
+                setCategories(menuData.content);
+            } catch (error) {
+                console.error("Failed to fetch job menu:", error);
+            }
+        };
+        fetchMenu();
         const handleScroll = () => {
             const heroSection = document.getElementById("hero-section");
             if (heroSection) {
@@ -33,25 +36,63 @@ export default function StickyNav({ headerHeight }: { headerHeight: number }) {
         return () => {
             window.removeEventListener("scroll", handleScroll);
             window.removeEventListener("hideStickyNav", handleHide);
-        }
+        };
     }, []);
 
     return (
         <div
-            className={`fixed left-0 w-full bg-orange-300 z-40 shadow-md transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"}`}
+            className={`fixed left-0 w-full bg-orange-400 z-40 shadow-md transition-transform duration-300 ${visible ? "translate-y-0" : "-translate-y-full"
+                }`}
             style={{ top: `${headerHeight}px` }}
         >
             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-center items-center h-16">
                     <div className="flex space-x-8">
                         {categories.map((category) => (
-                            <a
-                                key={category.name}
-                                href="#"
-                                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                            <div
+                                key={category.id}
+                                className="relative"
+                                onMouseEnter={() => setHoveredCategory(category.id)}
+                                onMouseLeave={() => setHoveredCategory(null)}
                             >
-                                {category.name}
-                            </a>
+                                <Link
+                                    href={`/Categories?id=${category.id}`}
+                                    className="text-gray-600 hover:text-green-500 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    {category.tenLoaiCongViec}
+                                </Link>
+                                {hoveredCategory === category.id &&
+                                    category.dsNhomChiTietLoai.length > 0 && (
+                                        <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                            <div
+                                                className="py-1"
+                                                role="menu"
+                                                aria-orientation="vertical"
+                                                aria-labelledby="options-menu"
+                                            >
+                                                {category.dsNhomChiTietLoai.flatMap((sub: any) => [
+                                                    <Link
+                                                        key={`sub-${sub.id}`}
+                                                        href={`/Categories?id=${category.id}#${sub.id}`}
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                                                    >
+                                                        {sub.tenNhom}
+                                                    </Link>,
+                                                    ...sub.dsChiTietLoai.map((detail: any) => (
+                                                        <Link
+                                                            key={`detail-${sub.id}-${detail.id}`}
+                                                            href={`/Categories?id=${category.id}#${detail.id}`}
+                                                            className="block pl-8 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
+                                                            role="menuitem"
+                                                        >
+                                                            {detail.tenChiTiet}
+                                                        </Link>
+                                                    )),
+                                                ])}
+                                            </div>
+                                        </div>
+                                    )}
+                            </div>
                         ))}
                     </div>
                 </div>
