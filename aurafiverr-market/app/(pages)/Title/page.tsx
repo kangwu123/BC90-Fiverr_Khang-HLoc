@@ -8,34 +8,33 @@ import BackToTopButton from "@/app/components/BackToTop";
 import HomeFooter from "@/app/components/HomeFooter";
 import StickyNav from "@/app/components/StickyNav";
 
-const CategoriesPage = () => {
+const TitlePage = () => {
     const searchParams = useSearchParams();
-    const categoryId = searchParams.get("id");
-    const [category, setCategory] = useState<any>(null);
-    const [subcategories, setSubcategories] = useState<any[]>([]);
+    const titleId = searchParams.get("id");
+    const [title, setTitle] = useState<any>(null);
+    const [subtitles, setSubtitles] = useState<any[]>([]);
 
     useEffect(() => {
-        const fetchCategoryData = async () => {
-            if (categoryId) {
+        const fetchTitleData = async () => {
+            if (titleId) {
                 try {
                     const menuData = await getJobMenu();
-                    const currentCategory = menuData.content.find(
-                        (cat: any) => cat.id.toString() === categoryId
+                    const currentTitle = menuData.content.find(
+                        (title: any) => title.id.toString() === titleId
                     );
-                    if (currentCategory) {
-                        setCategory(currentCategory);
-                        setSubcategories(currentCategory.dsNhomChiTietLoai);
+                    if (currentTitle) {
+                        setTitle(currentTitle);
+                        setSubtitles(currentTitle.dsNhomChiTietLoai);
                     }
                 } catch (error) {
-                    console.error("Failed to fetch category data:", error);
+                    console.error("Failed to fetch title data:", error);
                 }
             }
         };
+        fetchTitleData();
+    }, [titleId]);
 
-        fetchCategoryData();
-    }, [categoryId]);
-
-    if (!category) {
+    if (!title) {
         return <div>Loading...</div>;
     }
 
@@ -86,9 +85,9 @@ const CategoriesPage = () => {
             </div>
 
             <div className="container mx-auto px-4 py-2 ">
-                <h1 className="text-3xl font-bold mb-4">{category.tenLoaiCongViec}</h1>
+                <h1 className="text-3xl font-bold mb-4">{title.tenLoaiCongViec}</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {subcategories.map((sub) => (
+                    {subtitles.map((sub) => (
                         <div key={sub.id} className="border rounded-lg p-4">
                             {sub.hinhAnh ? (
                                 <Image
@@ -146,4 +145,4 @@ const CategoriesPage = () => {
     );
 };
 
-export default CategoriesPage;
+export default TitlePage;

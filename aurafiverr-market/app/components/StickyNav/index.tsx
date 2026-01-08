@@ -5,14 +5,14 @@ import Link from "next/link";
 
 export default function StickyNav({ headerHeight }: { headerHeight: number }) {
     const [visible, setVisible] = useState(false);
-    const [categories, setCategories] = useState<any[]>([]);
-    const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
+    const [titles, setTitles] = useState<any[]>([]);
+    const [hoveredTitle, setHoveredTitle] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchMenu = async () => {
             try {
                 const menuData = await getJobMenu();
-                setCategories(menuData.content);
+                setTitles(menuData.content);
             } catch (error) {
                 console.error("Failed to fetch job menu:", error);
             }
@@ -48,21 +48,21 @@ export default function StickyNav({ headerHeight }: { headerHeight: number }) {
             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-center items-center h-16">
                     <div className="flex space-x-8">
-                        {categories.map((category) => (
+                        {titles.map((title) => (
                             <div
-                                key={category.id}
+                                key={title.id}
                                 className="relative"
-                                onMouseEnter={() => setHoveredCategory(category.id)}
-                                onMouseLeave={() => setHoveredCategory(null)}
+                                onMouseEnter={() => setHoveredTitle(title.id)}
+                                onMouseLeave={() => setHoveredTitle(null)}
                             >
                                 <Link
-                                    href={`/Categories?id=${category.id}`}
+                                    href={`/Title?id=${title.id}`}
                                     className="text-gray-600 hover:text-green-500 px-3 py-2 rounded-md text-sm font-medium"
                                 >
-                                    {category.tenLoaiCongViec}
+                                    {title.tenLoaiCongViec}
                                 </Link>
-                                {hoveredCategory === category.id &&
-                                    category.dsNhomChiTietLoai.length > 0 && (
+                                {hoveredTitle === title.id &&
+                                    title.dsNhomChiTietLoai.length > 0 && (
                                         <div className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                                             <div
                                                 className="py-1"
@@ -70,10 +70,10 @@ export default function StickyNav({ headerHeight }: { headerHeight: number }) {
                                                 aria-orientation="vertical"
                                                 aria-labelledby="options-menu"
                                             >
-                                                {category.dsNhomChiTietLoai.flatMap((sub: any) => [
+                                                {title.dsNhomChiTietLoai.flatMap((sub: any) => [
                                                     <Link
                                                         key={`sub-${sub.id}`}
-                                                        href={`/Categories?id=${category.id}#${sub.id}`}
+                                                        href={`/Title?id=${title.id}#${sub.id}`}
                                                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                                                     >
                                                         {sub.tenNhom}
@@ -81,7 +81,7 @@ export default function StickyNav({ headerHeight }: { headerHeight: number }) {
                                                     ...sub.dsChiTietLoai.map((detail: any) => (
                                                         <Link
                                                             key={`detail-${sub.id}-${detail.id}`}
-                                                            href={`/Categories?id=${category.id}#${detail.id}`}
+                                                            href={`/Categories?id=${sub.id}#${detail.id}`}
                                                             className="block pl-8 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                                                             role="menuitem"
                                                         >
