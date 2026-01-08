@@ -179,7 +179,14 @@
   --spacing-8: 32px;
   --spacing-10: 40px;
   --spacing-12: 48px;
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #4A5568;
 }
+input:checked ~ .block {
+  background-color: #A0AEC0;
+}
+
 .banner {
   background-size: cover;
   background-position: center;
@@ -204,4 +211,5 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+}
 }

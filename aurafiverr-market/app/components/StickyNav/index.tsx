@@ -81,7 +81,7 @@ export default function StickyNav({ headerHeight }: { headerHeight: number }) {
                                                     ...sub.dsChiTietLoai.map((detail: any) => (
                                                         <Link
                                                             key={`detail-${sub.id}-${detail.id}`}
-                                                            href={`/Categories?id=${sub.id}#${detail.id}`}
+                                                            href={`/Categories?id=${detail.id}`}
                                                             className="block pl-8 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-green-500"
                                                             role="menuitem"
                                                         >
