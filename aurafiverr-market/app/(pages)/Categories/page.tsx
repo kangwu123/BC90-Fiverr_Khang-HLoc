@@ -1,149 +1,141 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getJobMenu } from "@/app/services/job";
+import { getJobsByDetailType } from "@/app/services/job";
 import Image from "next/image";
 import HomeHeader from "@/app/components/HomeHeader";
 import BackToTopButton from "@/app/components/BackToTop";
 import HomeFooter from "@/app/components/HomeFooter";
 import StickyNav from "@/app/components/StickyNav";
+import { TJob } from "@/app/types";
+import { StarFilled, HeartOutlined } from "@ant-design/icons";
 
 const CategoriesPage = () => {
     const searchParams = useSearchParams();
-    const categoryId = searchParams.get("id");
-    const [category, setCategory] = useState<any>(null);
-    const [subcategories, setSubcategories] = useState<any[]>([]);
+    const detailTypeId = searchParams.get("id");
+    const [jobs, setJobs] = useState<TJob[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCategoryData = async () => {
-            if (categoryId) {
+            if (detailTypeId) {
                 try {
-                    const menuData = await getJobMenu();
-                    const currentCategory = menuData.content.find(
-                        (cat: any) => cat.id.toString() === categoryId
-                    );
-                    if (currentCategory) {
-                        setCategory(currentCategory);
-                        setSubcategories(currentCategory.dsNhomChiTietLoai);
+                    const categoryData = await getJobsByDetailType(Number(detailTypeId));
+                    if (categoryData.content) {
+                        setJobs(categoryData.content);
                     }
                 } catch (error) {
-                    console.error("Failed to fetch category data:", error);
+                    console.error("Failed to fetch job data:", error);
+                } finally {
+                    setLoading(false);
                 }
+            } else {
+                setLoading(false);
             }
         };
-
         fetchCategoryData();
-    }, [categoryId]);
+    }, [detailTypeId]);
 
-    if (!category) {
-        return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="h-12 w-12 rounded-full border-4 border-slate-100 border-t-rose-500 animate-spin"></div>
+            </div>
+        );
     }
-
     return (
         <>
             <HomeHeader />
             <StickyNav headerHeight={140} />
-
-            <div className="px-4 py-16 border rounded-md" style={{ backgroundColor: '#123d24' }}>
-                <div className="text-center text-white">
-                    <p className="text-2xl mb-5">Designs to make you stand out</p>
-                    <button className="bg-transparent border border-gray-300 rounded-md py-1 px-3 flex items-center mx-auto text-sm">
-                        <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span>How Works</span>
-                    </button>
-                </div>
-            </div>
-
             <div className="container mx-auto px-4 py-16">
-                <h2 className="text-2xl font-bold mb-4">Most popular in Graphics & Design</h2>
-                <div className="flex space-x-4">
-                    <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/Logo design_2x.png" alt="Minimalist Logo Design" width={40} height={40} />
-                        <span>Minimalist Logo Design</span>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
+                <div className="mb-8">
+                    <div className="flex justify-between items-center py-4 my-4">
+                        <div className="flex items-center gap-4">
+                            <button className="px-4 py-2 border rounded-md text-gray-700 bg-white hover:bg-gray-50 flex items-center">Category <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                            <button className="px-4 py-2 border rounded-md text-gray-700 bg-white hover:bg-gray-50 flex items-center">Service Options <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                            <button className="px-4 py-2 border rounded-md text-gray-700 bg-white hover:bg-gray-50 flex items-center">Seller Details <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                            <button className="px-4 py-2 border rounded-md text-gray-700 bg-white hover:bg-gray-50 flex items-center">Delivery Time <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                        </div>
+                        <div className="flex items-center gap-6">
+                            <label className="flex items-center cursor-pointer">
+                                <div className="relative">
+                                    <input type="checkbox" className="sr-only" />
+                                    <div className="block bg-gray-200 w-10 h-6 rounded-full"></div>
+                                    <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+                                </div>
+                                <div className="ml-3 text-gray-700 font-medium">Pro services</div>
+                            </label>
+                            <label className="flex items-center cursor-pointer">
+                                <div className="relative">
+                                    <input type="checkbox" className="sr-only" />
+                                    <div className="block bg-gray-200 w-10 h-6 rounded-full"></div>
+                                    <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+                                </div>
+                                <div className="ml-3 text-gray-700 font-medium">Local sellers</div>
+                            </label>
+                            <label className="flex items-center cursor-pointer">
+                                <div className="relative">
+                                    <input type="checkbox" className="sr-only" />
+                                    <div className="block bg-gray-200 w-10 h-6 rounded-full"></div>
+                                    <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+                                </div>
+                                <div className="ml-3 text-gray-700 font-medium">Online sellers</div>
+                            </label>
+                        </div>
                     </div>
-                    <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/Architecture.png" alt="Architecture & Interior Design" width={40} height={40} />
-                        <span>Architecture & Interior Design</span>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/Photoshop.png" alt="Image Editing" width={40} height={40} />
-                        <span>Image Editing</span>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/NftArt.png" alt="NFT Art" width={40} height={40} />
-                        <span>NFT Art</span>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/T-Shirts.png" alt="T-Shirts & Merchandise" width={40} height={40} />
-                        <span>T-Shirts & Merchandise</span>
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
+                    <div className="flex justify-between items-center">
+                        <p className="text-gray-600">{jobs.length} services available</p>
+                        <div className="flex items-center">
+                            <span className="text-gray-600 mr-2">Sort by</span>
+                            <button className="px-4 py-2 border rounded-md text-gray-700 bg-white hover:bg-gray-50 flex items-center font-bold">Relevance <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="container mx-auto px-4 py-2 ">
-                <h1 className="text-3xl font-bold mb-4">{category.tenLoaiCongViec}</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {subcategories.map((sub) => (
-                        <div key={sub.id} className="border rounded-lg p-4">
-                            {sub.hinhAnh ? (
-                                <Image
-                                    src={sub.hinhAnh}
-                                    alt={sub.tenNhom}
-                                    width={550}
-                                    height={300}
-                                    className="w-full h-48 object-cover rounded-t-lg"
-                                />
-                            ) : (
-                                <div className="w-full h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
-                                    <p className="text-gray-500">No Image Available</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    {jobs.map((job) => (
+                        <div key={job.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                            <Image
+                                src={job.congViec.hinhAnh || `https://placehold.co/550x300`}
+                                alt={job.congViec.tenCongViec}
+                                width={550}
+                                height={300}
+                                className="object-cover"
+                            />
+                            <div className="p-4">
+                                <div className="flex items-center mb-2">
+                                    <Image
+                                        src={job.avatar || `https://placehold.co/24x24`}
+                                        alt={job.tenNguoiTao}
+                                        width={24}
+                                        height={24}
+                                        className="rounded-full mr-2"
+                                    />
+                                    <span className="font-bold text-gray-900">{job.tenNguoiTao}</span>
                                 </div>
-                            )}
-                            <h2 className="text-xl font-semibold mt-4">{sub.tenNhom}</h2>
-                            <ul className="mt-2">
-                                {sub.dsChiTietLoai.map((detail: any) => (
-                                    <li key={detail.id} className="text-gray-600">
-                                        {detail.tenChiTiet}
-                                    </li>
-                                ))}
-                            </ul>
+                                <p className="text-gray-800 hover:text-rose-500 cursor-pointer mb-2 h-12 overflow-hidden">{job.congViec.tenCongViec}</p>
+                                <div className="flex items-center text-yellow-500 mb-2">
+                                    <StarFilled />&nbsp;
+                                    <span className="text-yellow-500">{job.congViec.saoCongViec}</span>
+                                    <span className="text-gray-500 ml-1">({job.congViec.danhGia})</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <HeartOutlined className="text-gray-500 cursor-pointer" />
+                                    <div className="text-right">
+                                        <span className="text-xs text-gray-500">STARTING AT</span> &nbsp;
+                                        <span className="font-bold text-lg">US${job.congViec.giaTien}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
-
-            <div className="container mx-auto px-4 py-16">
-                <h2 className="text-2xl font-bold text-center mb-8">Services Related To Graphics & Design</h2>
-                <div className="flex flex-wrap justify-center gap-4">
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Minimalist logo design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Signature logo design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Mascot logo design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">3d logo design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Hand drawn logo design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Vintage logo design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Remove background</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Photo restoration</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Photo retouching</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Image resize</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Product label design</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Custom twitch overlay</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Custom twitch emotes</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Gaming logo</button>
-                    <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Children book illustration</button>
-                </div>
-            </div>
-
             <div className="relative bg-white">
                 <BackToTopButton />
                 <HomeFooter />
             </div>
         </>
-
-    );
-};
+    )
+}
 
 export default CategoriesPage;
