@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'fiverrnew.cybersoft.edu.vn',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
     ]
   }
 };
