@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,6 +28,7 @@ const HomeHeader = ({
     onStickyChange,
 }: HeaderProps) => {
     const pathname = usePathname();
+    const router = useRouter();
     const [showBg, setShowBg] = useState(!isHome);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,6 +36,7 @@ const HomeHeader = ({
     const [userLogin, setUserLogin] = useState<any>(null);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +68,18 @@ const HomeHeader = ({
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
     }, [isHome, onStickyChange]);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if (searchTerm) {
+                router.push(`/result/${searchTerm}`);
+            } 
+        }, 1000);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchTerm, router, pathname]);
 
     const handleLoginSuccess = (userData: any) => {
         localStorage.setItem("USER_LOGIN", JSON.stringify(userData));
@@ -117,6 +131,12 @@ const HomeHeader = ({
                                     type="text"
                                     placeholder="What service are you looking for today?"
                                     className="w-full pl-12 pr-4 py-3 text-sm bg-white rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            router.push(`/result/${searchTerm}`);
+                                        }
+                                    }}
                                 />
                                 <FontAwesomeIcon
                                     icon={faSearch}
@@ -159,6 +179,12 @@ const HomeHeader = ({
                                         type="text"
                                         placeholder="What service are you looking for today?"
                                         className="w-full pl-12 pr-4 py-3 text-sm bg-white rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                router.push(`/result/${searchTerm}`);
+                                            }
+                                        }}
                                     />
                                     <FontAwesomeIcon
                                         icon={faSearch}
@@ -413,7 +439,7 @@ const HomeHeader = ({
                                 >
                                     <FontAwesomeIcon icon={faGlobe} /> English
                                 </Link>
-                        
+
                                 <Link
                                     href="/seller"
                                     onClick={() => setIsMenuOpen(false)}
