@@ -103,14 +103,29 @@ const CategoriesPage = () => {
                             />
                             <div className="p-4">
                                 <div className="flex items-center mb-2">
-                                    <Image
-                                        src={job.avatar || `https://placehold.co/24x24`}
-                                        alt={job.tenNguoiTao}
-                                        width={24}
-                                        height={24}
-                                        className="rounded-full mr-2"
-                                    />
-                                    <span className="font-bold text-gray-900">{job.tenNguoiTao}</span>
+                                    {job.tenNguoiTao ? (
+                                        <>
+                                            <Image
+                                                src={job.avatar || `https://placehold.co/24x24`}
+                                                alt={job.tenNguoiTao}
+                                                width={24}
+                                                height={24}
+                                                className="rounded-full mr-2"
+                                            />
+                                            <span className="font-bold text-gray-900">{job.tenNguoiTao}</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Image
+                                                src="https://i.pravatar.cc/24"
+                                                alt="User avatar"
+                                                width={24}
+                                                height={24}
+                                                className="rounded-full mr-2"
+                                            />
+                                            <span className="font-bold text-gray-900">Moriah Ad</span>
+                                        </>
+                                    )}
                                 </div>
                                 <p className="text-gray-800 hover:text-rose-500 cursor-pointer mb-2 h-12 overflow-hidden">{job.congViec.tenCongViec}</p>
                                 <div className="flex items-center text-yellow-500 mb-2">
