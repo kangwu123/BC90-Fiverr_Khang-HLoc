@@ -237,7 +237,7 @@ export default function Home() {
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center leading-tight">Our freelancers<br />will take it from here</h1>
                     <div className="w-full max-w-2xl">
                       <div className="relative">
-                        <input type="text" placeholder="Search for any service..." className="w-full p-4 rounded-md text-gray-900" />
+                        <input type="text" placeholder="Search for any service..." className="w-full p-4 rounded-md bg-amber-300 text-gray-900" />
                         <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-gray-600 text-amber-400 p-3 rounded-md hover:bg-gray-700">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -270,7 +270,7 @@ export default function Home() {
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center leading-tight">Our freelancers<br />will take it from here</h1>
                     <div className="w-full max-w-2xl">
                       <div className="relative">
-                        <input type="text" placeholder="Search for any service..." className="w-full p-4 rounded-md text-gray-900" />
+                        <input type="text" placeholder="Search for any service..." className="w-full p-4 rounded-md bg-amber-300 text-gray-900" />
                         <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-gray-600 text-amber-400 p-3 rounded-md hover:bg-gray-700">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

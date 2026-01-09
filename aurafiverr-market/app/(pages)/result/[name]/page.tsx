@@ -1,7 +1,7 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getJobsByDetailType } from "@/app/services/job";
+import { getJobsByName } from "@/app/services/job";
 import Image from "next/image";
 import HomeHeader from "@/app/components/HomeHeader";
 import BackToTopButton from "@/app/components/BackToTop";
@@ -9,32 +9,42 @@ import HomeFooter from "@/app/components/HomeFooter";
 import StickyNav from "@/app/components/StickyNav";
 import { TJob } from "@/app/types";
 import { StarFilled, HeartOutlined } from "@ant-design/icons";
+import { Pagination } from "antd";
 
-const CategoriesPage = () => {
-    const searchParams = useSearchParams();
-    const detailTypeId = searchParams.get("id");
+const ResultPage = () => {
+    const params = useParams();
+    const { name } = params;
     const [jobs, setJobs] = useState<TJob[]>([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [total, setTotal] = useState(0);
+    const pageSize = 8;
 
     useEffect(() => {
-        const fetchCategoryData = async () => {
-            if (detailTypeId) {
+        const fetchJobs = async () => {
+            if (name) {
                 try {
-                    const categoryData = await getJobsByDetailType(Number(detailTypeId));
-                    if (categoryData.content) {
-                        setJobs(categoryData.content);
+                    setLoading(true);
+                    const response = await getJobsByName(name as string);
+                    if (response.content) {
+                        setJobs(response.content);
+                        setTotal(response.content.length);
                     }
                 } catch (error) {
-                    console.error("Failed to fetch job data:", error);
+                    console.error("Failed to fetch jobs:", error);
                 } finally {
                     setLoading(false);
                 }
-            } else {
-                setLoading(false);
             }
         };
-        fetchCategoryData();
-    }, [detailTypeId]);
+        fetchJobs();
+    }, [name]);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const paginatedJobs = jobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     if (loading) {
         return (
@@ -84,7 +94,7 @@ const CategoriesPage = () => {
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
-                        <p className="text-gray-600">{jobs.length} service{jobs.length !== 1 ? 's' : ''} available</p>
+                        <p className="text-gray-600">{paginatedJobs.length} service{paginatedJobs.length !== 1 ? 's' : ''} available</p>
                         <div className="flex items-center">
                             <span className="text-gray-600 mr-2">Sort by</span>
                             <button className="px-4 py-2 border rounded-md text-gray-700 bg-white hover:bg-gray-50 flex items-center font-bold">Relevance <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
@@ -92,7 +102,7 @@ const CategoriesPage = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {jobs.map((job) => (
+                    {paginatedJobs.map((job) => (
                         <div key={job.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                             <Image
                                 src={job.congViec.hinhAnh || `https://placehold.co/550x300`}
@@ -144,6 +154,15 @@ const CategoriesPage = () => {
                         </div>
                     ))}
                 </div>
+                <div className="flex justify-center mt-8">
+                    <Pagination
+                        current={currentPage}
+                        total={total}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                        showSizeChanger={false}
+                    />
+                </div>
             </div>
             <div className="relative bg-white">
                 <BackToTopButton />
@@ -153,4 +172,4 @@ const CategoriesPage = () => {
     )
 }
 
-export default CategoriesPage;
+export default ResultPage;

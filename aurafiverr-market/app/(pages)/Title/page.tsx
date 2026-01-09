@@ -7,6 +7,7 @@ import HomeHeader from "@/app/components/HomeHeader";
 import BackToTopButton from "@/app/components/BackToTop";
 import HomeFooter from "@/app/components/HomeFooter";
 import StickyNav from "@/app/components/StickyNav";
+import Link from "next/link";
 
 const TitlePage = () => {
     const searchParams = useSearchParams();
@@ -106,7 +107,9 @@ const TitlePage = () => {
                             <ul className="mt-2">
                                 {sub.dsChiTietLoai.map((detail: any) => (
                                     <li key={detail.id} className="text-gray-600">
-                                        {detail.tenChiTiet}
+                                        <Link href={`/Categories?id=${detail.id}`}>
+                                            {detail.tenChiTiet}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
