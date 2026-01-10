@@ -11,10 +11,13 @@ import {
     faBars,
     faTimes,
     faSearch,
-    faGlobe
+    faGlobe,
+    faX,
 } from "@fortawesome/free-solid-svg-icons";
 import LoginModal from "@/app/(pages)/login";
 import RegisterModal from "@/app/(pages)/register";
+import { getJobsByName } from "@/app/services/job";
+import { TJob } from "@/app/types";
 
 interface HeaderProps {
     isHome?: boolean;
@@ -37,14 +40,20 @@ const HomeHeader = ({
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [suggestions, setSuggestions] = useState<TJob[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<HTMLDivElement>(null);
 
     // Xử lý đóng dropdown khi bấm ra ngoài
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setDropdownOpen(false);
+            }
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setShowSuggestions(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -70,16 +79,39 @@ const HomeHeader = ({
     }, [isHome, onStickyChange]);
 
     useEffect(() => {
-        const handler = setTimeout(() => {
+        const handler = setTimeout(async () => {
             if (searchTerm) {
-                router.push(`/result/${searchTerm}`);
-            } 
+                try {
+                    const response = await getJobsByName(searchTerm);
+                    if (response.content) {
+                        setSuggestions(response.content);
+                        setShowSuggestions(true);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch suggestions:", error);
+                }
+            } else {
+                setSuggestions([]);
+            }
         }, 1000);
 
         return () => {
             clearTimeout(handler);
         };
-    }, [searchTerm, router, pathname]);
+    }, [searchTerm]);
+
+    const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            router.push(`/result/${searchTerm}`);
+            setShowSuggestions(false);
+        }
+    };
+
+    const handleSuggestionClick = (name: string) => {
+        setSearchTerm(name);
+        router.push(`/result/${name}`);
+        setShowSuggestions(false);
+    };
 
     const handleLoginSuccess = (userData: any) => {
         localStorage.setItem("USER_LOGIN", JSON.stringify(userData));
@@ -131,17 +163,36 @@ const HomeHeader = ({
                                     type="text"
                                     placeholder="What service are you looking for today?"
                                     className="w-full pl-12 pr-4 py-3 text-sm bg-white rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                    value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            router.push(`/result/${searchTerm}`);
-                                        }
-                                    }}
+                                    onKeyDown={handleSearch}
+                                    onFocus={() => setShowSuggestions(true)}
                                 />
                                 <FontAwesomeIcon
                                     icon={faSearch}
                                     className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
                                 />
+                                {searchTerm && (
+                                    <button
+                                        onClick={() => setSearchTerm("")}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    >
+                                        <FontAwesomeIcon icon={faX} />
+                                    </button>
+                                )}
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <div className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-b-lg shadow-lg z-10">
+                                        {suggestions.map((job) => (
+                                            <div
+                                                key={job.id}
+                                                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                onClick={() => handleSuggestionClick(job.congViec.tenCongViec)}
+                                            >
+                                                {job.congViec.tenCongViec}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     ) : (
@@ -174,22 +225,41 @@ const HomeHeader = ({
                                 exit={{ opacity: 0, y: -10 }}
                                 className="w-96"
                             >
-                                <div className="relative w-full">
+                                <div className="relative w-full" ref={searchRef}>
                                     <input
                                         type="text"
                                         placeholder="What service are you looking for today?"
-                                        className="w-full pl-12 pr-4 py-3 text-sm bg-white rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                        className="w-full pl-12 pr-10 py-3 text-sm bg-white rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                        value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                router.push(`/result/${searchTerm}`);
-                                            }
-                                        }}
+                                        onKeyDown={handleSearch}
+                                        onFocus={() => setShowSuggestions(true)}
                                     />
                                     <FontAwesomeIcon
                                         icon={faSearch}
                                         className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
                                     />
+                                    {searchTerm && (
+                                        <button
+                                            onClick={() => setSearchTerm("")}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        >
+                                            <FontAwesomeIcon icon={faX} />
+                                        </button>
+                                    )}
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <div className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-b-lg shadow-lg z-10">
+                                            {suggestions.map((job) => (
+                                                <div
+                                                    key={job.id}
+                                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                                    onClick={() => handleSuggestionClick(job.congViec.tenCongViec)}
+                                                >
+                                                    {job.congViec.tenCongViec}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </motion.div>
                         )}
