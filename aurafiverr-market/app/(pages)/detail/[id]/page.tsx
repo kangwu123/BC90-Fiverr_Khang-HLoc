@@ -185,8 +185,8 @@ const JobDetailPage = () => {
                             <h2 className="text-2xl font-bold mb-4">Leave some comments</h2>
                             <div className="flex items-center mb-4">
                                 {[...Array(5)].map((_, i) => (
-                                    <span key={i} onClick={() => setRating(i + 1)} className="cursor-pointer">
-                                        {i < rating ? <StarFilled className="text-yellow-500" /> : <StarOutlined className="text-yellow-500" />}
+                                    <span key={i} onClick={() => setRating(i + 1)} className="cursor-pointer text-yellow-500">
+                                        {i < rating ? <StarFilled /> : <StarOutlined />}
                                     </span>
                                 ))}
                                 <span className="ml-2 font-bold">Rating</span>
