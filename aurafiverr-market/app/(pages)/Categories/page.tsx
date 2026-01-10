@@ -7,6 +7,7 @@ import HomeHeader from "@/app/components/HomeHeader";
 import BackToTopButton from "@/app/components/BackToTop";
 import HomeFooter from "@/app/components/HomeFooter";
 import StickyNav from "@/app/components/StickyNav";
+import Link from "next/link";
 import { TJob } from "@/app/types";
 import { StarFilled, HeartOutlined } from "@ant-design/icons";
 
@@ -93,55 +94,58 @@ const CategoriesPage = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {jobs.map((job) => (
-                        <div key={job.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                            <Image
-                                src={job.congViec.hinhAnh || `https://placehold.co/550x300`}
-                                alt={job.congViec.tenCongViec}
-                                width={550}
-                                height={300}
-                                className="object-cover"
-                            />
-                            <div className="p-4">
-                                <div className="flex items-center mb-2">
-                                    {job.tenNguoiTao ? (
-                                        <>
-                                            <Image
-                                                src={job.avatar || `https://placehold.co/24x24`}
-                                                alt={job.tenNguoiTao}
-                                                width={24}
-                                                height={24}
-                                                className="rounded-full mr-2"
-                                            />
-                                            <span className="font-bold text-gray-900">{job.tenNguoiTao}</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Image
-                                                src="https://i.pravatar.cc/24"
-                                                alt="User avatar"
-                                                width={24}
-                                                height={24}
-                                                className="rounded-full mr-2"
-                                            />
-                                            <span className="font-bold text-gray-900">Moriah Ad</span>
-                                        </>
-                                    )}
-                                </div>
-                                <p className="text-gray-800 hover:text-rose-500 cursor-pointer mb-2 h-12 overflow-hidden">{job.congViec.tenCongViec}</p>
-                                <div className="flex items-center text-yellow-500 mb-2">
-                                    <StarFilled />&nbsp;
-                                    <span className="text-yellow-500">{job.congViec.saoCongViec}</span>
-                                    <span className="text-gray-500 ml-1">({job.congViec.danhGia})</span>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <HeartOutlined className="text-gray-500 cursor-pointer" />
-                                    <div className="text-right">
-                                        <span className="text-xs text-gray-500">STARTING AT</span> &nbsp;
-                                        <span className="font-bold text-lg">US${job.congViec.giaTien}</span>
+                        <Link key={job.id} href={`/detail/${job.id}`}>
+                            <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
+                                <Image
+                                    src={job.congViec.hinhAnh || `https://placehold.co/550x300`}
+                                    alt={job.congViec.tenCongViec}
+                                    width={550}
+                                    height={300}
+                                    className="object-cover"
+                                />
+                                <div className="p-4">
+                                    <div className="flex items-center mb-2">
+                                            {job.tenNguoiTao ? (
+                                                <>
+                                                    <Image
+                                                        src={job.avatar || `https://placehold.co/24x24`}
+                                                        alt={job.tenNguoiTao}
+                                                        width={24}
+                                                        height={24}
+                                                        className="rounded-full mr-2"
+                                                    />
+                                                    <span className="font-bold text-gray-900">{job.tenNguoiTao}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Image
+                                                        src="https://i.pravatar.cc/24"
+                                                        alt="User avatar"
+                                                        width={24}
+                                                        height={24}
+                                                        className="rounded-full mr-2"
+                                                    />
+                                                    <span className="font-bold text-gray-900">Moriah Ad</span>
+                                                </>
+                                            )}
+                                    </div>
+                                    <p className="text-gray-800 hover:text-rose-500 cursor-pointer mb-2 h-12 overflow-hidden">{job.congViec.tenCongViec}</p>
+                                    
+                                    <div className="flex items-center text-yellow-500 mb-2">
+                                            <StarFilled />&nbsp;
+                                            <span className="text-yellow-500">{job.congViec.saoCongViec}</span>
+                                            <span className="text-gray-500 ml-1">({job.congViec.danhGia})</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <HeartOutlined className="text-gray-500 cursor-pointer" />
+                                            <div className="text-right">
+                                                <span className="text-xs text-gray-500">STARTING AT</span> &nbsp;
+                                                <span className="font-bold text-lg">US${job.congViec.giaTien}</span>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
