@@ -38,3 +38,15 @@ export interface TSubtype {
     hinhAnh: string;
     maLoaiCongviec: number;
 }
+export type TComment = {
+    id: number;
+    ngayBinhLuan: string;
+    noiDung: string;
+    saoBinhLuan: number;
+    tenNguoiBinhLuan: string;
+    avatar: string;
+};
+
+export type TJobDetail = TJob & {
+    chiTietLoai: any[];
+};
