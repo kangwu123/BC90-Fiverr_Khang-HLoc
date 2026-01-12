@@ -104,48 +104,52 @@ const LoginModal = ({
                     </h3>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="relative">
-                            <FontAwesomeIcon
-                                icon={faUser}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                            />
-                            <input
-                                type="email"
-                                placeholder="Your Email"
-                                value={login.email}
-                                onChange={(e) => {
-                                    setLogin({ ...login, email: e.target.value });
-                                    setErrors({ ...errors, email: undefined, form: undefined });
-                                }}
-                                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#B99333] text-[#272B45]"
-                            />
+                        <div>
+                            <div className="relative">
+                                <FontAwesomeIcon
+                                    icon={faUser}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Your Email"
+                                    value={login.email}
+                                    onChange={(e) => {
+                                        setLogin({ ...login, email: e.target.value });
+                                        setErrors({ ...errors, email: undefined, form: undefined });
+                                    }}
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#B99333] text-[#272B45]"
+                                />
+                            </div>
                             {errors.email && (
                                 <p className="mt-1 text-sm text-red-500">{errors.email}</p>
                             )}
                         </div>
 
-                        <div className="relative">
-                            <FontAwesomeIcon
-                                icon={faLock}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                            />
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Your Password"
-                                value={login.password}
-                                onChange={(e) => {
-                                    setLogin({ ...login, password: e.target.value });
-                                    setErrors({ ...errors, password: undefined, form: undefined });
-                                }}
-                                className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#B99333] text-[#272B45]"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                            >
-                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                            </button>
+                        <div>
+                            <div className="relative">
+                                <FontAwesomeIcon
+                                    icon={faLock}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                                />
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Your Password"
+                                    value={login.password}
+                                    onChange={(e) => {
+                                        setLogin({ ...login, password: e.target.value });
+                                        setErrors({ ...errors, password: undefined, form: undefined });
+                                    }}
+                                    className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#B99333] text-[#272B45]"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                >
+                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                </button>
+                            </div>
                             {errors.password && (
                                 <p className="mt-1 text-sm text-red-500">{errors.password}</p>
                             )}
