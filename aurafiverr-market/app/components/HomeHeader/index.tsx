@@ -353,7 +353,7 @@ const HomeHeader = ({
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             className={`absolute right-0 top-12 sm:top-14 
-                                        ${userLogin ? "w-105 xl:w-120" : "w-44"} 
+                                        ${userLogin ? "w-90 xl:w-72" : "w-44"} 
                                         bg-white/95 backdrop-blur-md 
                                         rounded-2xl shadow-2xl border border-gray-100 z-50 p-4`}
                         >
@@ -382,35 +382,18 @@ const HomeHeader = ({
                                     </div>
                                 ) : (
                                     <div className="flex flex-col gap-2 px-2 py-1 text-sm text-gray-700">
-                                        <div className="flex gap-3">
-                                            <span className="font-semibold w-28 shrink-0">ID:</span>
-                                            <span>{userLogin.content.user.id}</span>
-                                        </div>
+                                        <Link
+                                            href="/UserProfile"
+                                            onClick={() => { setDropdownOpen(false); }}
+                                            className="w-full px-4 py-3 text-left cursor-pointer text-gray-700 hover:bg-gray-100 rounded-xl flex items-center gap-3 transition-all font-medium"
+                                        >
+                                            <FontAwesomeIcon icon={faUser} />
+                                                User Profile
+                                        </Link>
 
-                                        <div className="flex gap-3">
-                                            <span className="font-semibold w-28 shrink-0">Name:</span>
-                                            <span>{userLogin.content.user.name}</span>
-                                        </div>
+                                        <div className="h-px bg-gray-200 my-2" />
 
-                                        <div className="flex gap-3">
-                                            <span className="font-semibold w-28 shrink-0">Email:</span>
-                                            <span className="break-all">{userLogin.content.user.email}</span>
-                                        </div>
-
-                                        <div className="flex gap-3">
-                                            <span className="font-semibold w-28 shrink-0">Birthday:</span>
-                                            <span>{userLogin.content.user.birthday}</span>
-                                        </div>
-
-                                        <div className="flex gap-3">
-                                            <span className="font-semibold w-28 shrink-0">Gender:</span>
-                                            <span>{userLogin.content.user.gender ? "Male" : "Female"}</span>
-                                        </div>
-
-                                        <div className="h-px bg-gray-200 my-3" />
-
-                                        <button
-                                            onClick={handleLogout}
+                                        <button onClick={handleLogout}
                                             className="w-full px-4 py-2 text-left cursor-pointer 
                             text-red-500 hover:bg-red-50 rounded-xl 
                             flex items-center gap-3 transition-all font-medium"

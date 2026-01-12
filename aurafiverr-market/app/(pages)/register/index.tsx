@@ -91,7 +91,7 @@ const RegisterModal = ({
         if (!register.password) {
             newErrors.password = "Password is required";
         } else if (!passwordRegex.test(register.password)) {
-            newErrors.password ="Password must be at least 6 characters and contain both letters and numbers";
+            newErrors.password = "Password must be at least 6 characters and contain both letters and numbers";
         }
 
         if (register.password !== passwordConfirm) {
@@ -151,7 +151,7 @@ const RegisterModal = ({
         >
             <button
                 onClick={onClose}
-                className="absolute right-4 top-4 text-gray-600 hover:text-red-600 transition cursor-pointer"
+                className="absolute right-6 top-12 text-gray-600 hover:text-red-600 transition cursor-pointer"
             >
                 <FontAwesomeIcon icon={faXmark} size="lg" />
             </button>
