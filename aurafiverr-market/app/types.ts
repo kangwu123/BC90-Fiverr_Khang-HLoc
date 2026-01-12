@@ -8,6 +8,8 @@ export interface TUser {
     avatar: string | null;
     gender: boolean;
     role: string;
+    skill: string[];
+    certification: string[];
 }
 
 export type TCongViec = {
