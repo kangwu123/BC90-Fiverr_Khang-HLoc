@@ -22,7 +22,6 @@ export default async function JobTable({ keyword, page }: Props) {
 
     const result = await res.json();
 
-    // normalize result to an array of jobs
     let jobs: any[] = [];
 
     if (Array.isArray(result)) jobs = result;
@@ -36,7 +35,6 @@ export default async function JobTable({ keyword, page }: Props) {
         jobs = [result];
     }
 
-    // filter by keyword
     const normalizedKeyword = (keyword || "").toLowerCase().trim();
     const filtered = normalizedKeyword
         ? jobs.filter((j) => {

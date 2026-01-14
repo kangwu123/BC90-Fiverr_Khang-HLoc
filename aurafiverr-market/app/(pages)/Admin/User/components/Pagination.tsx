@@ -23,7 +23,7 @@ export default function Pagination({ page, keyword, totalPages }: Props) {
 
     return (
         <div className="flex items-center justify-end gap-2">
-            {/* Prev */}
+
             <button
                 disabled={page <= 1}
                 onClick={() => goToPage(page - 1)}
@@ -33,28 +33,38 @@ export default function Pagination({ page, keyword, totalPages }: Props) {
                 Trước
             </button>
 
-            {/* Page numbers */}
-            {Array.from({ length: totalPages }).map((_, i) => {
-                const p = i + 1;
-                const active = p === page;
+            {(() => {
+                let startPage = Math.max(1, page - 2);
+                let endPage = Math.min(totalPages, startPage + 4);
 
-                return (
-                    <button
-                        key={p}
-                        onClick={() => goToPage(p)}
-                        className={`
-                            h-8 w-8 rounded-lg text-sm font-medium
-                            ${active
-                                ? "bg-blue-600 text-white"
-                                : "border hover:bg-gray-100"}
-                        `}
-                    >
-                        {p}
-                    </button>
-                );
-            })}
+                if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                }
 
-            {/* Next */}
+                const pages = [];
+                for (let p = startPage; p <= endPage; p++) {
+                    pages.push(p);
+                }
+
+                return pages.map((p) => {
+                    const active = p === page;
+                    return (
+                        <button
+                            key={p}
+                            onClick={() => goToPage(p)}
+                            className={`
+                                h-8 w-8 rounded-lg text-sm font-medium
+                                ${active
+                                    ? "bg-blue-600 text-white"
+                                    : "border hover:bg-gray-100"}
+                            `}
+                        >
+                            {p}
+                        </button>
+                    );
+                });
+            })()}
+
             <button
                 disabled={page >= totalPages}
                 onClick={() => goToPage(page + 1)}

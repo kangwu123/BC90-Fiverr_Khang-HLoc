@@ -1,6 +1,3 @@
-
-
-
 export default function AdminPage() {
     return (
         <div className="rounded-xl bg-white p-6 shadow">

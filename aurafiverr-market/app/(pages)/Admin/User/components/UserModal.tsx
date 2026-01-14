@@ -14,6 +14,14 @@ type Props = {
 export default function UserModal({ open, user, onClose }: Props) {
     const router = useRouter();
 
+    const initialForm = {
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        role: "USER",
+    };
+
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -102,6 +110,8 @@ export default function UserModal({ open, user, onClose }: Props) {
             }
 
             toast.success(isEdit ? "Cập nhật thành công" : "Thêm thành công");
+            setForm(initialForm);
+            setErrors({});
             onClose();
             router.refresh();
         } catch (error: any) {

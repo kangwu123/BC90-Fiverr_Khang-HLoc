@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
             }
 
             const raw = res?.data || {};
-            // API returns token under content.token based on user's example
+
             const token = raw?.token || raw?.accessToken || raw?.content?.token || raw?.content?.accessToken || raw?.content?.data?.token || "";
 
             if (!token) {
@@ -31,29 +31,26 @@ export default function AdminLoginPage() {
                 return;
             }
 
-            // Store normalized so other components can reliably find accessToken or token
+            if (raw?.content?.user?.role !== "ADMIN") {
+                toast.error("Bạn không có quyền truy cập");
+                return;
+            }
+
             const store = {
                 ...raw,
-                accessToken: token,  // standardize to accessToken
-                token: token,        // also keep token field
+                accessToken: token,
+                token: token,
             };
 
             localStorage.setItem("USER_ADMIN", JSON.stringify(store));
-
-            // Verify storage
-            const verify = localStorage.getItem("USER_ADMIN");
-            const verifyParsed = verify ? JSON.parse(verify) : null;
-            console.log("✅ USER_ADMIN stored successfully");
-            console.log("✅ Token in storage:", verifyParsed?.accessToken ? "✓ Present" : "✗ Missing");
-            console.log("✅ User ID:", verifyParsed?.user?.id || "Not found");
 
             window.dispatchEvent(new Event("adminAuthChanged"));
             toast.success("Đăng nhập admin thành công");
             router.push("/Admin");
 
-        } catch (error) {
-            console.error(error);
-            toast.error("Lỗi đăng nhập");
+        } catch (error: any) {
+            toast.error(error?.response?.data?.content || "Lỗi server");
+
         } finally {
             setLoading(false);
         }
@@ -109,7 +106,7 @@ export default function AdminLoginPage() {
                         type="submit"
                         disabled={loading}
                         className={`mt-2 w-full rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition
-          ${loading
+                           ${loading
                                 ? "bg-emerald-300 cursor-not-allowed"
                                 : "bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98]"
                             }`}
@@ -118,7 +115,6 @@ export default function AdminLoginPage() {
                     </button>
                 </form>
 
-                {/* Footer */}
                 <div className="mt-6 text-center text-xs text-slate-400">
                     © 2026 Admin Panel
                 </div>

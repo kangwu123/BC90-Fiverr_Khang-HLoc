@@ -9,7 +9,7 @@ export default function AdminAuth({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // skip check on login page
+
         if (pathname === "/Admin/login") {
             setLoading(false);
             return;
@@ -21,7 +21,6 @@ export default function AdminAuth({ children }: { children: React.ReactNode }) {
             return;
         }
 
-        // (optional) could verify token server-side here
         setLoading(false);
     }, [pathname]);
 

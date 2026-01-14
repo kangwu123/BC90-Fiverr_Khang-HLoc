@@ -10,7 +10,8 @@ const menu = [
     { label: "Dashboard", href: "/Admin" },
     { label: "Quản lý người dùng", href: "/Admin/User" },
     { label: "Quản lý Công việc", href: "/Admin/job" },
-    { label: "Quản lý dịch vụ", href: "/Admin/orders" },
+    { label: "Quản lý Loại công việc", href: "/Admin/jobtype" },
+    { label: "Quản lý dịch vụ", href: "/Admin/jobservice" },
 ];
 
 export default function Sidebar() {
@@ -55,16 +56,14 @@ export default function Sidebar() {
         "Admin";
 
     return (
-        <aside className="flex h-screen w-64 flex-col bg-gradient-to-b from-slate-900 to-slate-950 text-slate-100 shadow-2xl">
+        <aside className="fixed left-0 top-0    h-screen w-64 flex flex-col bg-gradient-to-b from-slate-900 to-slate-950 text-slate-100 shadow-2xl">
 
-            {/* Logo */}
             <div className="px-6 py-5 border-b border-slate-800">
                 <div className="text-xl font-bold tracking-wide text-blue-400">
                     Fiverr Admin
                 </div>
             </div>
 
-            {/* User info */}
             <div className="px-4 py-4 border-b border-slate-800">
                 <div className="rounded-xl bg-slate-800/60 p-3">
 
@@ -88,7 +87,6 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            {/* Menu */}
             <nav className="flex-1 space-y-1 px-3 py-4">
                 {menu.map((item) => {
                     const active = pathname === item.href;
@@ -103,14 +101,12 @@ export default function Sidebar() {
                                     : "text-slate-300 hover:bg-slate-800 hover:text-white"
                                 }`}
                         >
-                            {/* Active indicator */}
                             <span
                                 className={`absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r
                                     ${active ? "bg-blue-400" : "bg-transparent"}
                                 `}
                             />
 
-                            {/* Dot */}
                             <span
                                 className={`h-2 w-2 rounded-full transition
                                     ${active
@@ -125,7 +121,6 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            {/* Footer */}
             <div className="px-4 py-3 text-center text-xs text-slate-500 border-t border-slate-800">
                 © 2026 Fiverr Admin
             </div>

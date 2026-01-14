@@ -13,6 +13,17 @@ type Props = {
 
 export default function JobModal({ open, job, onClose }: Props) {
     const router = useRouter();
+    const initialForm = {
+        tenCongViec: "",
+        moTa: "",
+        moTaNgan: "",
+        giaTien: "",
+        danhGia: "",
+        maChiTietLoaiCongViec: "",
+        hinhAnh: "",
+        saoCongViec: "",
+    };
+
 
     const [form, setForm] = useState({
         tenCongViec: "",
@@ -68,7 +79,12 @@ export default function JobModal({ open, job, onClose }: Props) {
         const newErrors: any = {};
         if (!form.tenCongViec.trim()) newErrors.tenCongViec = "Tiêu đề không được bỏ trống";
         if (!form.giaTien || isNaN(Number(form.giaTien))) newErrors.giaTien = "Giá phải là số";
+        if (!form.maChiTietLoaiCongViec.trim()) newErrors.maChiTietLoaiCongViec = "Mã loại công việc không được bỏ trống";
+        if (!form.hinhAnh.trim()) newErrors.hinhAnh = "Hình ảnh không được bỏ trống";
         if (!form.moTa.trim()) newErrors.moTa = "Mô tả không được bỏ trống";
+        if (!form.moTaNgan.trim()) newErrors.moTaNgan = "Mô tả ngắn không được bỏ trống";
+        if (!form.danhGia.trim()) newErrors.danhGia = "Đánh giá không được bỏ trống";
+        if (!form.saoCongViec.trim()) newErrors.saoCongViec = "Số sao không được bỏ trống";
 
         if (Object.keys(newErrors).length) {
             setErrors(newErrors);
@@ -82,8 +98,6 @@ export default function JobModal({ open, job, onClose }: Props) {
 
             const userAdminRaw = typeof window !== 'undefined' ? localStorage.getItem('USER_ADMIN') : null;
             const userAdmin = userAdminRaw ? JSON.parse(userAdminRaw) : null;
-
-            const accessToken = userAdmin?.accessToken || userAdmin?.token || userAdmin?.content?.token || userAdmin?.content?.accessToken || "";
 
             const adminUser = userAdmin?.user || userAdmin?.content?.user || userAdmin;
             const userId = adminUser?.id || 0;
@@ -104,8 +118,6 @@ export default function JobModal({ open, job, onClose }: Props) {
                 payload.id = job?.id;
             }
 
-            const TOKEN_CYBERSOFT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA5MCIsIkhldEhhblN0cmluZyI6IjI5LzA1LzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc4MDAxMjgwMDAwMCIsIm5iZiI6MTc1MzAzMDgwMCwiZXhwIjoxNzgwMTYwNDAwfQ.KkGRtLpEsgoM4M_TapjOZIzvAwbay3QvXIwwN8XUqWk";
-
             const res = isEdit
                 ? await api.put(`cong-viec/${job?.id}`, payload)
                 : await api.post(`cong-viec`, payload);
@@ -116,6 +128,8 @@ export default function JobModal({ open, job, onClose }: Props) {
             }
 
             toast.success(isEdit ? "Cập nhật thành công" : "Thêm thành công");
+            setForm(initialForm);
+            setErrors({});
             onClose();
             router.refresh();
         } catch (error: any) {
@@ -172,6 +186,7 @@ export default function JobModal({ open, job, onClose }: Props) {
                             placeholder="Mã chi tiết loại"
                             className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
                         />
+                        {errors.maChiTietLoaiCongViec && <p className="text-xs text-red-500">{errors.maChiTietLoaiCongViec}</p>}
                     </div>
 
                     {/* Image */}
@@ -183,6 +198,7 @@ export default function JobModal({ open, job, onClose }: Props) {
                             placeholder="URL hình ảnh"
                             className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
                         />
+                        {errors.hinhAnh && <p className="text-xs text-red-500">{errors.hinhAnh}</p>}
                     </div>
 
                     {/* Description */}
@@ -207,6 +223,7 @@ export default function JobModal({ open, job, onClose }: Props) {
                             placeholder="Mô tả ngắn"
                             className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
                         />
+                        {errors.moTaNgan && <p className="text-xs text-red-500">{errors.moTaNgan}</p>}
                     </div>
 
                     {/* Ratings & stars */}
@@ -219,6 +236,7 @@ export default function JobModal({ open, job, onClose }: Props) {
                                 placeholder="Đánh giá"
                                 className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
                             />
+                            {errors.danhGia && <p className="text-xs text-red-500">{errors.danhGia}</p>}
                         </div>
 
                         <div className="space-y-1">
@@ -229,6 +247,7 @@ export default function JobModal({ open, job, onClose }: Props) {
                                 placeholder="Số sao"
                                 className="w-full rounded-lg border px-3 py-2 text-sm outline-none transition border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
                             />
+                            {errors.saoCongViec && <p className="text-xs text-red-500">{errors.saoCongViec}</p>}
                         </div>
                     </div>
                 </div>
