@@ -1,6 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 
-const TOKEN_CYBERSOFT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJOb2RlanMgNTQiLCJIZXRIYW5TdHJpbmciOiIyOC8wOC8yMDI2IiwiSGV0SGFuVGltZSI6IjE3ODc4NzUyMDAwMDAiLCJuYmYiOjE3Njk1MzMyMDAsImV4cCI6MTc4ODAyMjgwMH0.cX4W082coiCPW_GttAh6P5fDK6QCHTATy3vjQnjDt9Q"
+export const TOKEN_CYBERSOFT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA5MCIsIkhldEhhblN0cmluZyI6IjI5LzA1LzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc4MDAxMjgwMDAwMCIsIm5iZiI6MTc1MzAzMDgwMCwiZXhwIjoxNzgwMTYwNDAwfQ.KkGRtLpEsgoM4M_TapjOZIzvAwbay3QvXIwwN8XUqWk"
 
 const api = axios.create({
     baseURL: "https://fiverrnew.cybersoft.edu.vn/api/",
@@ -8,17 +8,21 @@ const api = axios.create({
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig<any>) => {
     if (typeof window !== "undefined") {
-    const userAdmin = localStorage.getItem("USER_ADMIN");
-    const userLogin = localStorage.getItem("USER_LOGIN");
+        const userAdmin = localStorage.getItem("USER_ADMIN");
+        const userLogin = localStorage.getItem("USER_LOGIN");
 
-    const adminToken = userAdmin ? JSON.parse(userAdmin).accessToken : "";
-    const loginToken = userLogin ? JSON.parse(userLogin).accessToken : "";  
-    
-    if (adminToken || loginToken) {
-        config.headers["Authorization"] = `Bearer ${adminToken || loginToken}`;
+        const adminData = userAdmin ? JSON.parse(userAdmin) : null;
+        const adminToken = adminData?.token || adminData?.accessToken || adminData?.content?.token || adminData?.content?.accessToken || "";
+
+        const loginData = userLogin ? JSON.parse(userLogin) : null;
+        const loginToken = loginData?.token || loginData?.accessToken || loginData?.content?.token || loginData?.content?.accessToken || "";
+
+        if (adminToken || loginToken) {
+            config.headers["token"] = adminToken || loginToken;
         }
     }
-    config.headers["TokenCybersoft"] = TOKEN_CYBERSOFT
+    config.headers["tokenCybersoft"] = TOKEN_CYBERSOFT;
     return config;
 });
+
 export default api
