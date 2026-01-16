@@ -1,14 +1,14 @@
-import UserHeader from "./components/UserHeader";
-import UserTable from "./components/UserTable";
+import JobHeader from "./components/JobHeader";
+import JobTable from "./components/JobTable";
 
-type UsersPageProps = {
+type JobsPageProps = {
     searchParams: Promise<{
         keyword?: string;
         page?: string;
     }>;
 };
 
-export default async function UsersPage({ searchParams }: UsersPageProps) {
+export default async function JobsPage({ searchParams }: JobsPageProps) {
     const params = await searchParams;
 
     const keyword = params.keyword ?? "";
@@ -16,8 +16,8 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
 
     return (
         <div className="space-y-6">
-            <UserHeader />
-            <UserTable keyword={keyword} page={page} />
+            <JobHeader />
+            <JobTable keyword={keyword} page={page} />
         </div>
     );
 }
