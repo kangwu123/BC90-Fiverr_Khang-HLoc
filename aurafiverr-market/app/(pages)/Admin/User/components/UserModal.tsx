@@ -19,6 +19,7 @@ export default function UserModal({ open, user, onClose }: Props) {
         email: "",
         phone: "",
         password: "",
+        gender: 0,
         role: "USER",
     };
 
@@ -27,22 +28,24 @@ export default function UserModal({ open, user, onClose }: Props) {
         email: "",
         phone: "",
         password: "",
+        gender: 0,
         role: "USER",
     });
     const [submitting, setSubmitting] = useState(false);
-    const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string; password?: string; role?: string }>({});
+    const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string; password?: string; role?: string; gender?: boolean }>({});
 
     useEffect(() => {
         if (user) {
             setForm({
                 name: user.name ?? "",
                 email: user.email ?? "",
-                phone: (user.phone ?? user.sdt ?? "") + "",
+                phone: user.phone ?? "",
                 password: "",
+                gender: user.gender ? 0 : 1,
                 role: user.role ?? "USER",
             });
         } else {
-            setForm({ name: "", email: "", phone: "", password: "", role: "USER" });
+            setForm({ name: "", email: "", phone: "", password: "", gender: 0, role: "USER" });
         }
     }, [user]);
 
@@ -54,7 +57,7 @@ export default function UserModal({ open, user, onClose }: Props) {
 
         const isEdit = !!user;
 
-        const newErrors: { name?: string; email?: string; phone?: string; password?: string } = {};
+        const newErrors: { name?: string; email?: string; phone?: string; password?: string; gender?: boolean } = {};
         if (!form.name.trim()) {
             newErrors.name = "Tên không được bỏ trống";
         }
@@ -75,6 +78,9 @@ export default function UserModal({ open, user, onClose }: Props) {
         if (form.password && form.password.length > 0 && form.password.length < 6) {
             newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
         }
+        if (form.gender !== 0 && form.gender !== 1) {
+            newErrors.gender = true;
+        }
 
         if (Object.keys(newErrors).length) {
             setErrors(newErrors);
@@ -90,7 +96,7 @@ export default function UserModal({ open, user, onClose }: Props) {
                 email: form.email,
                 phone: form.phone,
                 birthday: user?.birthday,
-                gender: user?.gender ?? true,
+                gender: form.gender === 0,
                 role: form.role,
                 skill: user?.skill || [],
                 certification: user?.certification || [],
@@ -220,6 +226,23 @@ export default function UserModal({ open, user, onClose }: Props) {
                                 }`}
                         />
                         {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
+                    </div>
+                    {/* Gender */}
+                    <div className="space-y-1">
+                        <label className="text-xs font-medium text-slate-600 leading-4 text-left">Giới tính</label>
+                        <select
+                            value={form.gender}
+                            onChange={(e) => setForm({ ...form, gender: Number(e.target.value) })}
+                            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition
+                        ${errors.gender
+                                    ? "border-red-500 focus:ring-2 focus:ring-red-500/30"
+                                    : "border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
+                                }`}
+                        >
+                            <option value={0}>Nam</option>
+                            <option value={1}>Nữ</option>
+                        </select>
+                        {errors.gender && <p className="text-xs text-red-500">Giới tính không hợp lệ</p>}
                     </div>
                 </div>
 

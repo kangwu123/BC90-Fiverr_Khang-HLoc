@@ -23,7 +23,7 @@ export default function AdminLayout({
     }
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
+        <div className="flex min-h-screen bg-linear-to-br from-slate-100 to-slate-200">
             <Sidebar />
             <main className="ml-64 flex-1 p-8">
                 <AdminAuth>{children}</AdminAuth>

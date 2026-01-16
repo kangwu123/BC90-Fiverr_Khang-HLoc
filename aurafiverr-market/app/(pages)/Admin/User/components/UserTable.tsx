@@ -36,7 +36,9 @@ export default async function UserTable({ keyword, page }: Props) {
                         <tr>
                             <th className="px-6 py-3 text-left">Tên</th>
                             <th className="px-6 py-3 text-left">Email</th>
+                            <th className="px-6 py-3 text-left">Số điện thoại</th>
                             <th className="px-6 py-3 text-left">Role</th>
+                            <th className="px-6 py-3 text-left">Giới tính</th>
                             <th className="px-6 py-3 text-left">Password</th>
                             <th className="px-6 py-3 text-center">Hành động</th>
                         </tr>
@@ -46,7 +48,7 @@ export default async function UserTable({ keyword, page }: Props) {
                         {users.length === 0 && (
                             <tr>
                                 <td
-                                    colSpan={5}
+                                    colSpan={7}
                                     className="px-6 py-8 text-center text-gray-500"
                                 >
                                     Không tìm thấy người dùng
@@ -58,7 +60,9 @@ export default async function UserTable({ keyword, page }: Props) {
                             <tr key={user.id}>
                                 <td className="px-6 py-4">{user.name}</td>
                                 <td className="px-6 py-4">{user.email}</td>
+                                <td className="px-6 py-4">{user.phone || '—'}</td>
                                 <td className="px-6 py-4">{user.role ?? 'USER'}</td>
+                                <td className="px-6 py-4">{user.gender ? 'Nam' : 'Nữ'}</td>
                                 <td className="px-6 py-4">{user.password ? '●●●●●' : '—'}</td>
                                 <td className="px-6 py-4 text-center">
                                     <UserActions userId={user.id} />
