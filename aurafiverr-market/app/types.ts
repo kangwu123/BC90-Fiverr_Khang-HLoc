@@ -3,7 +3,7 @@ export interface TUser {
     name: string;
     email: string;
     password: string;
-    phone: number | null;
+    phone: string | null;
     birthday: string;
     avatar: string | null;
     gender: boolean;
@@ -51,4 +51,13 @@ export type TComment = {
 
 export type TJobDetail = TJob & {
     chiTietLoai: any[];
+};
+
+export type TBookingHireJob = {
+    id: number;
+    maCongViec: number;
+    congViec: TCongViec;
+    maNguoiThue: number;
+    ngayThue: string;
+    hoanThanh: boolean;
 };

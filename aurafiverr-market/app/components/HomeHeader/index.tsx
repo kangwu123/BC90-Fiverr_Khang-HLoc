@@ -113,6 +113,18 @@ const HomeHeader = ({
         setShowSuggestions(false);
     };
 
+    useEffect(() => {
+        const handleOpenModal = (event: any) => {
+            const mode = event.detail?.mode || "login";
+            setAuthModal(mode);
+            setDropdownOpen(false);
+            setIsMenuOpen(false);
+        };
+
+        window.addEventListener("OPEN_AUTH_MODAL", handleOpenModal);
+        return () => window.removeEventListener("OPEN_AUTH_MODAL", handleOpenModal);
+    }, []);
+
     const handleLoginSuccess = (userData: any) => {
         localStorage.setItem("USER_LOGIN", JSON.stringify(userData));
         setUserLogin(userData);
@@ -283,6 +295,9 @@ const HomeHeader = ({
                             <FontAwesomeIcon icon={faGlobe} />
                             English
                         </Link>
+                        <Link href="/Listing" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "/Listing" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
+                            Listing
+                        </Link>
                         <Link href="/seller" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "/seller" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
                             Become a Seller
                         </Link>
@@ -388,7 +403,7 @@ const HomeHeader = ({
                                             className="w-full px-4 py-3 text-left cursor-pointer text-gray-700 hover:bg-gray-100 rounded-xl flex items-center gap-3 transition-all font-medium"
                                         >
                                             <FontAwesomeIcon icon={faUser} />
-                                                User Profile
+                                            User Profile
                                         </Link>
 
                                         <div className="h-px bg-gray-200 my-2" />
@@ -491,6 +506,13 @@ const HomeHeader = ({
                                     className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "#" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
                                 >
                                     <FontAwesomeIcon icon={faGlobe} /> English
+                                </Link>
+                                <Link
+                                    href="#"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "#" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
+                                >
+                                    Listing
                                 </Link>
 
                                 <Link

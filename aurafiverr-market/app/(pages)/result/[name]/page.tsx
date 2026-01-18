@@ -104,18 +104,15 @@ const ResultPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {paginatedJobs.map((job) => (
                         <div key={job.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                            <Image
-                                src={job.congViec.hinhAnh || `https://placehold.co/550x300`}
-                                alt={job.congViec.tenCongViec}
-                                width={550}
-                                height={300}
+                            <img src={job.congViec.hinhAnh || `https://placehold.co/550x300`}
+                                alt={job.congViec.tenCongViec}    
                                 className="object-cover"
                             />
                             <div className="p-4">
                                 <div className="flex items-center mb-2">
                                     {job.tenNguoiTao ? (
                                         <>
-                                            <Image
+                                            <img
                                                 src={job.avatar || `https://placehold.co/24x24`}
                                                 alt={job.tenNguoiTao}
                                                 width={24}
@@ -126,8 +123,7 @@ const ResultPage = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <Image
-                                                src="https://i.pravatar.cc/24"
+                                            <img src="https://i.pravatar.cc/24"
                                                 alt="User avatar"
                                                 width={24}
                                                 height={24}
