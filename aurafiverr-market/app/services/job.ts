@@ -36,12 +36,12 @@ export const postComment = async (data: any) => {
     return response.data;
 };
 
-export const hireJob = async (id: number) => {
-    const response = await api.post(`thue-cong-viec/${id}`);
+export const hireJob = async (data: any) => {
+    const response = await api.post("thue-cong-viec", data);
     return response.data;
 };
 
-export const getHiredJobs = async (data:any) => {
-    const response = await api.get(`thue-cong-viec/lay-danh-sach-da-thue`,data);
+export const getHiredJobs = async () => {
+    const response = await api.get("thue-cong-viec/lay-danh-sach-da-thue");
     return response.data;
 };

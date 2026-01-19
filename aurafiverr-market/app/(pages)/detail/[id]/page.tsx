@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { StarFilled } from "@ant-design/icons";
 import { getJobDetail, getCommentsByJob, hireJob } from "@/app/services/job";
 import { TJobDetail, TComment } from "@/app/types";
@@ -12,6 +12,7 @@ import CommentSection from "./comment";
 
 const JobDetailPage = () => {
     const { id } = useParams();
+    const router = useRouter();
     const [job, setJob] = useState<TJobDetail | null>(null);
     const [comments, setComments] = useState<TComment[]>([]);
     const [loading, setLoading] = useState(true);
@@ -39,13 +40,20 @@ const JobDetailPage = () => {
     const handleHire = async () => {
         if (job) {
             try {
-                // const hireData = {
-                //     maCongViec: job.id,
-                //     maNguoiThue: 0, // Replace with actual user ID
-                //     ngayThue: new Date().toISOString(),
-                // };
-                await hireJob(Number(id));
-                alert("Job hired successfully!");
+                const userLogin = localStorage.getItem("USER_LOGIN");
+                if (!userLogin) {
+                    alert("Please login to hire a job.");
+                    return;
+                }
+                const userData = JSON.parse(userLogin);
+                const hireData = {
+                    maCongViec: job.id,
+                    maNguoiThue: userData.content.user.id,
+                    ngayThue: new Date().toISOString(),
+                };
+                await hireJob(hireData);
+                window.dispatchEvent(new CustomEvent("JOB_HIRED_SUCCESS"));
+                router.push('/Listing');
             } catch (error) {
                 console.error("Failed to hire job:", error);
             }
@@ -134,6 +142,7 @@ const JobDetailPage = () => {
                         </div>
                         <CommentSection jobId={String(job.id)} initialComments={comments} />
                     </div>
+
                     <div className="lg:col-span-1">
                         <div className="sticky top-32 p-6 border rounded-lg shadow-lg">
                             <div className="flex justify-between items-center mb-4">
