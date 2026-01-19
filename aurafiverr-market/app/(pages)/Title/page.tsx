@@ -2,7 +2,6 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getJobMenu } from "@/app/services/job";
-import Image from "next/image";
 import HomeHeader from "@/app/components/HomeHeader";
 import BackToTopButton from "@/app/components/BackToTop";
 import HomeFooter from "@/app/components/HomeFooter";
@@ -58,27 +57,27 @@ const TitlePage = () => {
                 <h2 className="text-2xl font-bold mb-4">Most popular in Graphics & Design</h2>
                 <div className="flex space-x-4">
                     <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/Logo design_2x.png" alt="Minimalist Logo Design" width={40} height={40} />
+                        <img src="/img/Categories/Logo design_2x.png" alt="Minimalist Logo Design" width={40} height={40} />
                         <span>Minimalist Logo Design</span>
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
                     </div>
                     <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/Architecture.png" alt="Architecture & Interior Design" width={40} height={40} />
+                        <img src="/img/Categories/Architecture.png" alt="Architecture & Interior Design" width={40} height={40} />
                         <span>Architecture & Interior Design</span>
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
                     </div>
                     <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/Photoshop.png" alt="Image Editing" width={40} height={40} />
+                        <img src="/img/Categories/Photoshop.png" alt="Image Editing" width={40} height={40} />
                         <span>Image Editing</span>
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
                     </div>
                     <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/NftArt.png" alt="NFT Art" width={40} height={40} />
+                        <img src="/img/Categories/NftArt.png" alt="NFT Art" width={40} height={40} />
                         <span>NFT Art</span>
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
                     </div>
                     <div className="flex items-center space-x-2 border rounded-lg px-4 py-2">
-                        <Image src="/img/Categories/T-Shirts.png" alt="T-Shirts & Merchandise" width={40} height={40} />
+                        <img src="/img/Categories/T-Shirts.png" alt="T-Shirts & Merchandise" width={40} height={40} />
                         <span>T-Shirts & Merchandise</span>
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" className="svg-inline--fa fa-arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"></path></svg>
                     </div>
@@ -91,7 +90,7 @@ const TitlePage = () => {
                     {subtitles.map((sub) => (
                         <div key={sub.id} className="border rounded-lg p-4">
                             {sub.hinhAnh ? (
-                                <Image
+                                <img
                                     src={sub.hinhAnh}
                                     alt={sub.tenNhom}
                                     width={550}
