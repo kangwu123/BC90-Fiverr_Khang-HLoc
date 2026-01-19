@@ -1,22 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import Image from "next/image";
-import { StarFilled, StarOutlined } from "@ant-design/icons";
-import { getJobDetail, getCommentsByJob, postComment, hireJob } from "@/app/services/job";
+import { useParams, useRouter } from "next/navigation";
+import { StarFilled } from "@ant-design/icons";
+import { getJobDetail, getCommentsByJob, hireJob } from "@/app/services/job";
 import { TJobDetail, TComment } from "@/app/types";
 import HomeHeader from "@/app/components/HomeHeader";
 import HomeFooter from "@/app/components/HomeFooter";
 import BackToTopButton from "@/app/components/BackToTop";
 import StickyNav from "@/app/components/StickyNav";
+import CommentSection from "./comment";
 
 const JobDetailPage = () => {
     const { id } = useParams();
+    const router = useRouter();
     const [job, setJob] = useState<TJobDetail | null>(null);
     const [comments, setComments] = useState<TComment[]>([]);
     const [loading, setLoading] = useState(true);
-    const [newComment, setNewComment] = useState("");
-    const [rating, setRating] = useState(0);
 
     useEffect(() => {
         const fetchJobData = async () => {
@@ -38,38 +37,23 @@ const JobDetailPage = () => {
         fetchJobData();
     }, [id]);
 
-    const handlePostComment = async () => {
-        if (newComment.trim() && rating > 0 && job) {
-            try {
-                const commentData = {
-                    maCongViec: job.id,
-                    maNguoiBinhLuan: 0, // Replace with actual user ID
-                    ngayBinhLuan: new Date().toISOString(),
-                    noiDung: newComment,
-                    saoBinhLuan: rating,
-                };
-                await postComment(commentData);
-                setNewComment("");
-                setRating(0);
-                // Refresh comments
-                const commentsData = await getCommentsByJob(job.id);
-                setComments(commentsData.content);
-            } catch (error) {
-                console.error("Failed to post comment:", error);
-            }
-        }
-    };
-
     const handleHire = async () => {
         if (job) {
             try {
+                const userLogin = localStorage.getItem("USER_LOGIN");
+                if (!userLogin) {
+                    alert("Please login to hire a job.");
+                    return;
+                }
+                const userData = JSON.parse(userLogin);
                 const hireData = {
                     maCongViec: job.id,
-                    maNguoiThue: 0, // Replace with actual user ID
+                    maNguoiThue: userData.content.user.id,
                     ngayThue: new Date().toISOString(),
                 };
                 await hireJob(hireData);
-                alert("Job hired successfully!");
+                window.dispatchEvent(new CustomEvent("JOB_HIRED_SUCCESS"));
+                router.push('/Listing');
             } catch (error) {
                 console.error("Failed to hire job:", error);
             }
@@ -97,7 +81,7 @@ const JobDetailPage = () => {
                     <div className="lg:col-span-2">
                         <h1 className="text-3xl font-bold mb-4">{job.congViec.tenCongViec}</h1>
                         <div className="flex items-center mb-4">
-                            <Image
+                            <img
                                 src={job.avatar || `https://placehold.co/40x40`}
                                 alt={job.tenNguoiTao}
                                 width={40}
@@ -113,7 +97,7 @@ const JobDetailPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <Image
+                        <img
                             src={job.congViec.hinhAnh || `https://placehold.co/800x450`}
                             alt={job.congViec.tenCongViec}
                             width={800}
@@ -127,7 +111,7 @@ const JobDetailPage = () => {
                         <div className="mt-8">
                             <h2 className="text-2xl font-bold mb-4">About The Seller</h2>
                             <div className="flex items-center">
-                                <Image
+                                <img
                                     src={job.avatar || `https://placehold.co/100x100`}
                                     alt={job.tenNguoiTao}
                                     width={100}
@@ -156,55 +140,9 @@ const JobDetailPage = () => {
                                 ))}
                             </div>
                         </div>
-                        <div className="mt-8">
-                            <h2 className="text-2xl font-bold mb-4">{comments.length} Reviews</h2>
-                            {comments.map((comment) => (
-                                <div key={comment.id} className="border-t py-4">
-                                    <div className="flex items-center mb-2">
-                                        <Image
-                                            src={comment.avatar || `https://placehold.co/40x40`}
-                                            alt={comment.tenNguoiBinhLuan}
-                                            width={40}
-                                            height={40}
-                                            className="rounded-full mr-4"
-                                        />
-                                        <div>
-                                            <p className="font-bold">{comment.tenNguoiBinhLuan}</p>
-                                            <div className="flex items-center text-yellow-500">
-                                                {[...Array(5)].map((_, i) => (
-                                                    i < comment.saoBinhLuan ? <StarFilled key={i} /> : <StarOutlined key={i} />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="text-gray-700">{comment.noiDung}</p>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="mt-8">
-                            <h2 className="text-2xl font-bold mb-4">Leave some comments</h2>
-                            <div className="flex items-center mb-4">
-                                {[...Array(5)].map((_, i) => (
-                                    <span key={i} onClick={() => setRating(i + 1)} className="cursor-pointer text-yellow-500">
-                                        {i < rating ? <StarFilled /> : <StarOutlined />}
-                                    </span>
-                                ))}
-                                <span className="ml-2 font-bold">Rating</span>
-                            </div>
-                            <textarea
-                                className="w-full p-4 border rounded-lg"
-                                rows={4}
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                            ></textarea>
-                            <button
-                                onClick={handlePostComment}
-                                className="mt-4 px-6 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
-                            >
-                                Comment
-                            </button>
-                        </div>
+                        <CommentSection jobId={String(job.id)} initialComments={comments} />
                     </div>
+
                     <div className="lg:col-span-1">
                         <div className="sticky top-32 p-6 border rounded-lg shadow-lg">
                             <div className="flex justify-between items-center mb-4">
