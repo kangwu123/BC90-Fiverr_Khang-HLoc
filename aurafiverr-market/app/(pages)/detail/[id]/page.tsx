@@ -37,27 +37,8 @@ const JobDetailPage = () => {
         fetchJobData();
     }, [id]);
 
-    const handleHire = async () => {
-        if (job) {
-            try {
-                const userLogin = localStorage.getItem("USER_LOGIN");
-                if (!userLogin) {
-                    alert("Please login to hire a job.");
-                    return;
-                }
-                const userData = JSON.parse(userLogin);
-                const hireData = {
-                    maCongViec: job.id,
-                    maNguoiThue: userData.content.user.id,
-                    ngayThue: new Date().toISOString(),
-                };
-                await hireJob(hireData);
-                window.dispatchEvent(new CustomEvent("JOB_HIRED_SUCCESS"));
-                router.push('/Listing');
-            } catch (error) {
-                console.error("Failed to hire job:", error);
-            }
-        }
+    const handleCheckoutHire = async () => {
+        if (job) {router.push(`/checkout/${job.id}`);}
     };
 
     if (loading) {
@@ -156,7 +137,7 @@ const JobDetailPage = () => {
                                 <li className="flex items-center"><svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>Good feature</li>
                             </ul>
                             <button
-                                onClick={handleHire}
+                                onClick={handleCheckoutHire}
                                 className="w-full py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
                             >
                                 Continue (US${job.congViec.giaTien})

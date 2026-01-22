@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { TBookingHireJob, TUser } from "@/app/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faUserLock } from "@fortawesome/free-solid-svg-icons";
+import { faUserLock } from "@fortawesome/free-solid-svg-icons";
 import HomeHeader from "@/app/components/HomeHeader";
 import StickyNav from "@/app/components/StickyNav";
 import BackToTopButton from "@/app/components/BackToTop";
@@ -27,6 +27,7 @@ const ListingPage = () => {
       const raw = localStorage.getItem("USER_LOGIN");
       if (!raw) {
         setUser(null);
+        setHiredBookingJobs([]);
         return;
       }
       const parsed = JSON.parse(raw);
@@ -34,6 +35,10 @@ const ListingPage = () => {
       if (!currentUser?.id) return;
       setUser(currentUser);
 
+      const res = await api.get<{ content: TBookingHireJob[] }>(
+        `/thue-cong-viec/lay-danh-sach-da-thue`
+      );
+      setHiredBookingJobs(res.data.content);
     } finally {
       setLoading(false);
     }
@@ -74,7 +79,7 @@ const ListingPage = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await api.delete(`/cong-viec/${jobId}`);
+          await api.delete(`/thue-cong-viec/${jobId}`);
           Swal.fire("Job Hire Booking Delete Successfully!", "", "success");
           fetchData();
         } catch (error) {
@@ -176,7 +181,53 @@ const ListingPage = () => {
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
                   My Posted Jobs
                 </h3>
-     
+                {hiredBookingJobs.length > 0 ? (
+                  <div className="space-y-6">
+                    {hiredBookingJobs.map((job) => (
+                      <div
+                        key={job.id}
+                        className="flex items-center space-x-4 border-b pb-4"
+                      >
+                        <img
+                          src={job.congViec.hinhAnh}
+                          alt={job.congViec.tenCongViec}
+                          className="w-32 h-20 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <h4 className="font-bold text-gray-800">
+                            {job.congViec.tenCongViec}
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            {job.congViec.moTaNgan}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-lg text-gray-800">
+                            ${job.congViec.giaTien}
+                          </p>
+                          <div className="flex mt-2">
+                            <button
+                              onClick={() =>
+                                router.push(`/detail/${job.congViec.id}`)
+                              }
+                              className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-green-600"
+                            >
+                              View detail
+                            </button>
+                            <button
+                              onClick={() => handleDeleteJob(job.id)}
+                              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                            >
+                              DEL
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No jobs posted yet.</p>
+                )}
               </div>
             </div>
           </div>
