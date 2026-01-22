@@ -1,26 +1,25 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { getHiredJobs, getJobDetail } from "@/app/services/job";
-import { TBookingHireJob, TUser, TCongViec } from "@/app/types";
+import { TBookingHireJob, TUser } from "@/app/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faUserLock } from "@fortawesome/free-solid-svg-icons";
+import { faUserLock } from "@fortawesome/free-solid-svg-icons";
 import HomeHeader from "@/app/components/HomeHeader";
 import StickyNav from "@/app/components/StickyNav";
 import BackToTopButton from "@/app/components/BackToTop";
 import HomeFooter from "@/app/components/HomeFooter";
 import api from "@/app/services/api";
 import EditProfilePopUp from "./editProfile";
+import LinkedAccounts from "./LinkedAccounts";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const ListingPage = () => {
+  const router = useRouter();
   const [user, setUser] = useState<TUser | null>(null);
-  const [jobDetails, setJobDetails] = useState<TCongViec[]>([]);
   const [hiredBookingJobs, setHiredBookingJobs] = useState<TBookingHireJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const calculateBuyerPays = (price: number) => {
-    return price + (price * 0.055) + 3;
-  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -36,9 +35,10 @@ const ListingPage = () => {
       if (!currentUser?.id) return;
       setUser(currentUser);
 
-      const res = await getHiredJobs(currentUser.id);
-      const list: TBookingHireJob[] = res.content || [];
-      setHiredBookingJobs(list);
+      const res = await api.get<{ content: TBookingHireJob[] }>(
+        `/thue-cong-viec/lay-danh-sach-da-thue`
+      );
+      setHiredBookingJobs(res.data.content);
     } finally {
       setLoading(false);
     }
@@ -67,6 +67,28 @@ const ListingPage = () => {
       console.log(error);
     }
     setIsEditOpen(true);
+  };
+
+  const handleDeleteJob = async (jobId: number) => {
+    Swal.fire({
+      title: "Do you want to delete it?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      denyButtonText: `No`,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await api.delete(`/thue-cong-viec/${jobId}`);
+          Swal.fire("Job Hire Booking Delete Successfully!", "", "success");
+          fetchData();
+        } catch (error) {
+          Swal.fire("Failed to delete job", "", "error");
+        }
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
   };
 
   if (loading) {
@@ -151,58 +173,61 @@ const ListingPage = () => {
                   Edit Profile
                 </button>
               </div>
+              <LinkedAccounts />
             </div>
 
-            <div className="lg:col-span-2 mt-8 lg:mt-0">
-              <div className="bg-white rounded-2xl shadow-lg p-8">
-                <h1 className="text-4xl font-bold text-gray-800 mb-2">Hire Booking History</h1>
-                <p className="text-gray-500 mb-8">You have {hiredBookingJobs.length} hired booking jobs</p>
-
-                <div className="space-y-6">
-                  {hiredBookingJobs.map((job) => (
-                    <div key={job.id} className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col md:flex-row">
-                      <div className="relative w-full md:w-1/3 h-48 md:h-auto">
-                        <img src={job.congViec.hinhAnh} alt={job.congViec.tenCongViec}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  My Posted Jobs
+                </h3>
+                {hiredBookingJobs.length > 0 ? (
+                  <div className="space-y-6">
+                    {hiredBookingJobs.map((job) => (
+                      <div
+                        key={job.id}
+                        className="flex items-center space-x-4 border-b pb-4"
+                      >
+                        <img
+                          src={job.congViec.hinhAnh}
+                          alt={job.congViec.tenCongViec}
+                          className="w-32 h-20 object-cover rounded-lg"
                         />
-                        <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                          JOB HIRED CONFIRMED
+                        <div className="flex-1">
+                          <h4 className="font-bold text-gray-800">
+                            {job.congViec.tenCongViec}
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            {job.congViec.moTaNgan}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-lg text-gray-800">
+                            ${job.congViec.giaTien}
+                          </p>
+                          <div className="flex mt-2">
+                            <button
+                              onClick={() =>
+                                router.push(`/detail/${job.congViec.id}`)
+                              }
+                              className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-green-600"
+                            >
+                              View detail
+                            </button>
+                            <button
+                              onClick={() => handleDeleteJob(job.id)}
+                              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                            >
+                              DEL
+                            </button>
+                          </div>
                         </div>
                       </div>
-
-                      <div className="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                          <h3 className="font-bold text-xl text-gray-800 mb-4">{job.congViec.tenCongViec}</h3>
-                          <div className="grid grid-cols-2 gap-4 text-sm mb-4">
-                            <div>
-                              <p className="text-gray-500 font-semibold">Hire Booking Date</p>
-                              <p className="text-gray-800 font-bold">{new Date(job.ngayThue).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                              <p className="text-gray-500 font-semibold">Finish Hired Job</p>
-                              <p className="text-gray-800 font-bold">{job.hoanThanh ? "Completed" : "In Progress"}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500 mb-6">
-                            <span>{job.congViec.saoCongViec} <i className="fa fa-star text-yellow-500"></i></span>
-                            <span>{job.congViec.danhGia} reviews</span>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="text-gray-500 text-sm">TOTAL AMOUNT</p>
-                            <p className="text-2xl font-bold text-red-500">${calculateBuyerPays(job.congViec.giaTien).toFixed(2)}</p>
-                          </div>
-                          <div className="flex items-center text-green-500 font-bold">
-                            <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
-                            Confirmed
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No jobs posted yet.</p>
+                )}
               </div>
             </div>
           </div>
