@@ -169,6 +169,37 @@ export default function Home() {
     },
   ];
 
+  const testimonials = [
+    {
+      video: "/img/video1.mp4",
+      poster: "/img/MadeOnFiverr/testimonial1.png",
+      author: "Kay Kim, Co-Founder",
+      company: "rooted",
+      quote: "It's extremely exciting that Fiverr has freelancers from all over the world — it broadens the talent pool. One of the best things about Fiverr is that while we're sleeping, someone's working."
+    },
+    {
+      video: "/img/video2.mp4",
+      poster: "/img/MadeOnFiverr/testimonial2.png",
+      author: "Caitlin Tormey, Chief Commercial Officer",
+      company: "Naadam",
+      quote: "We've used Fiverr for Shopify web development, graphic design, and backend web development. Working with Fiverr makes my job a little easier every day."
+    },
+    {
+      video: "/img/video3.mp4",
+      poster: "/img/MadeOnFiverr/testimonial3.png",
+      author: "Brighid Gannon, Co-Founder",
+      company: "Lavender",
+      quote: "Fiverr has been a key part of our growth strategy. The platform is easy to use and connects us with top-tier talent for any project we can dream up."
+    },
+    {
+      video: "/img/video4.mp4",
+      poster: "/img/MadeOnFiverr/testimonial4.png",
+      author: "Tim and Dan Joo, Co-Founders",
+      company: "HÆRFEST",
+      quote: "When you want to create a business bigger than yourself, you need a lot of help. That's what does."
+    }
+  ];
+
   useEffect(() => {
     let wow: any;
 
@@ -405,6 +436,50 @@ export default function Home() {
             </div>
           </section>
 
+          <section className="w-full py-20 bg-[#f1fdf7]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+              <Swiper
+                modules={[Navigation]}
+                navigation={{
+                  nextEl: ".testimonial-next",
+                  prevEl: ".testimonial-prev",
+                }}
+                spaceBetween={50}
+                slidesPerView={1}
+                loop={true}
+                className="testimonial-slider"
+              >
+                {testimonials.map((testimonial, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="flex flex-col lg:flex-row items-center">
+                      <div className="w-full lg:w-1/2">
+                        <div className="relative">
+                          <video controls poster={testimonial.poster} className="rounded-lg w-full">
+                            <source src={testimonial.video} type="video/mp4" />
+                          </video>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-1/2 lg:pl-16 mt-10 lg:mt-0">
+                        <p className="text-2xl ml-3 text-gray-600">
+                          {testimonial.author}, <span className="font-bold">{testimonial.company}</span>
+                        </p>
+                        <blockquote className="text-2xl ml-3 md:text-3xl italic text-gray-800 mt-4">
+                          "{testimonial.quote}"
+                        </blockquote>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <div className="testimonial-prev absolute top-1/2 -translate-y-1/2 -left-10 z-10 cursor-pointer bg-white shadow-md rounded-full w-12 h-12 flex items-center justify-center hover:bg-gray-100 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </div>
+              <div className="testimonial-next absolute top-1/2 -translate-y-1/2 -right-10 z-10 cursor-pointer bg-white shadow-md rounded-full w-12 h-12 flex items-center justify-center hover:bg-gray-100 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </div>
+            </div>
+          </section>
+
           <section className="w-full py-10 bg-white px-6">
             <h2 className="text-3xl text-teal-800 md:text-4xl font-bold text-center mb-14 wow animate__animated animate__fadeInUp">
               Vontélle’s trusted services
@@ -422,39 +497,6 @@ export default function Home() {
                     </p>
                   </div>
                 ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Testimonial Section */}
-          <section className="w-full py-20 bg-[#f1fdf7]">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 -left-10 z-10">
-                <button className="bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                </button>
-              </div>
-
-              <div className="flex flex-col lg:flex-row items-center">
-                <div className="w-full lg:w-1/2 relative mb-8 lg:mb-0">
-                  <video controls poster="/img/testimonial-video-cover.mp4" className="rounded-lg w-full">
-                    <source src="/img/testimonial-video-cover.mp4" type="video/mp4" />
-                  </video>
-                </div>
-
-                <div className="w-full lg:w-1/2 lg:pl-24 text-center lg:text-left">
-                  <p className="text-lg text-gray-500">
-                    Kay Kim, Co-Founder | <span className="font-bold text-black">rooted</span>
-                  </p>
-                  <blockquote className="mt-4 text-3xl font-serif text-[#0d472d] italic leading-snug">
-                    "It's extremely exciting that Fiverr has freelancers from all over the world — it broadens the talent pool. One of the best things about Fiverr is that while we're sleeping, someone's working."
-                  </blockquote>
-                </div>
-              </div>
-              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 -right-10 z-10">
-                <button className="bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                </button>
               </div>
             </div>
           </section>
@@ -480,48 +522,30 @@ export default function Home() {
           </section>
 
           <section className="w-full py-10 bg-white px-6">
-            <div className="max-w-4xl mx-auto relative">
+            <div className="max-w-6xl mx-auto">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-3xl font-bold text-gray-700">Made on AuraFiverr</h2>
               </div>
 
-              <Swiper
-                modules={[Navigation, Pagination]}
-                navigation={{
-                  nextEl: ".made-on-fiverr-next",
-                  prevEl: ".made-on-fiverr-prev",
-                }}
-                pagination={{ clickable: true }}
-                spaceBetween={16}
-                slidesPerView={4}
-                className="made-on-fiverr-slider"
-              >
+              <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max gap-4 masonry-grid">
                 {madeOnFiverr.map((item, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="relative group overflow-hidden rounded-lg">
-                      <img src={item.img} alt={item.title} className="w-full h-auto object-cover rounded-lg" />
-                      <div className="absolute inset-0 bg-opacity-50 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
-                        <div className="flex justify-between items-end">
-                          <div>
-                            <h3 className="text-red-600 font-bold">{item.title}</h3>
-                            <p className="text-amber-300 text-sm">{item.author}</p>
-                          </div>
+                  <div key={index} className="relative group overflow-hidden rounded-lg h-64 break-inside-avoid">
+                    <img src={item.img} alt={item.title} className="w-full h-full object-cover rounded-lg group-hover:blur-sm transition-all duration-300" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                      <div className="flex justify-between items-end">
+                        <div>
+                          <h3 className="text-red-600 font-bold">{item.title}</h3>
+                          <p className="text-amber-300 text-sm">{item.author}</p>
                         </div>
                       </div>
-                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button className="text-red-800 bg-opacity-25 rounded-full p-2">
-                          <HeartOutlined className="text-xl" />
-                        </button>
-                      </div>
                     </div>
-                  </SwiperSlide>
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button className="text-red-600 bg-white bg-opacity-80 rounded-full p-2 hover:bg-opacity-100 transition-all">
+                        <HeartOutlined className="text-xl" />
+                      </button>
+                    </div>
+                  </div>
                 ))}
-              </Swiper>
-              <div className="made-on-fiverr-prev absolute top-1/2 -translate-y-1/2 -left-10 z-10 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-              </div>
-              <div className="made-on-fiverr-next absolute top-1/2 -translate-y-1/2 -right-10 z-10 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </div>
             </div>
           </section>

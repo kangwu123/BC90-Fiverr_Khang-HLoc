@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getJobDetail, hireJob } from "@/app/services/job";
 import { TJobDetail } from "@/app/types";
@@ -14,31 +14,37 @@ const CheckoutPage = () => {
     const [user, setUser] = useState<any>(null);
     const [paymentMethod, setPaymentMethod] = useState("card");
 
+    // Initialize user from localStorage (only once)
+    useEffect(() => {
+        const userLogin = localStorage.getItem("USER_LOGIN");
+        if (userLogin) {
+            try {
+                setUser(JSON.parse(userLogin).content.user);
+            } catch (error) {
+                console.error("Failed to parse user data:", error);
+            }
+        }
+    }, []);
+
+    // Fetch job data
     useEffect(() => {
         const fetchJobData = async () => {
             if (id) {
                 try {
                     const jobData = await getJobDetail(Number(id));
-                    if (jobData.content.length > 0) {
-                        setJob(jobData.content[0]);
-                    } else {
-                        setJob(null);
-                    }
+                    setJob(jobData.content.length > 0 ? jobData.content[0] : null);
                 } catch (error) {
                     console.error("Failed to fetch job data:", error);
+                    setJob(null);
                 } finally {
                     setLoading(false);
                 }
             }
         };
         fetchJobData();
-        const userLogin = localStorage.getItem("USER_LOGIN");
-        if (userLogin) {
-            setUser(JSON.parse(userLogin).content.user);
-        }
     }, [id]);
 
-    const handlePay = async () => {
+    const handlePay = useCallback(async () => {
         if (job && user) {
             try {
                 const hireData = {
@@ -55,23 +61,29 @@ const CheckoutPage = () => {
                 alert("Payment failed. Please try again.");
             }
         }
-    };
+    }, [job, user, router]);
 
-    if (!job) {return <div>Job not found</div>;}
-    
-    const CalculatePrice = () => {
+    // Memoize price calculation
+    const priceData = useMemo(() => {
+        if (!job) return { serviceFee: 0, total: 0 };
         const serviceFee = job.congViec.giaTien * 0.08;
         const total = job.congViec.giaTien + serviceFee;
         return { serviceFee, total };
-    };
-   if (loading){
+    }, [job]);
+
+    // Check loading state first
+    if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white">
                 <div className="h-12 w-12 rounded-full border-4 border-slate-100 border-t-rose-500 animate-spin"></div>
             </div>
         );
     }
-      
+
+    // Then check if job exists
+    if (!job) {
+        return <div className="min-h-screen flex items-center justify-center">Job not found</div>;
+    }
 
     return (
         <>
@@ -109,11 +121,11 @@ const CheckoutPage = () => {
                             </div>
                             <div className="flex justify-between mb-2 text-gray-600">
                                 <span>Service fee</span>
-                                <span>${CalculatePrice().serviceFee.toFixed(2)}</span>
+                                <span>${priceData.serviceFee.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
                                 <span>Total</span>
-                                <span>${CalculatePrice().total.toFixed(2)}</span>
+                                <span>${priceData.total.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
@@ -172,7 +184,7 @@ const CheckoutPage = () => {
                             </label>
                         </div>
 
-                        <button onClick={handlePay} className="w-full py-3 bg-black text-white font-bold rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-green-500 hover:to-blue-500">
+                        <button onClick={handlePay} className="w-full py-3 bg-black text-white font-bold rounded-lg transition-all duration-300 hover:bg-linear-to-r hover:from-green-500 hover:to-blue-500">
                             Confirm and Pay
                         </button>
                         <p className="text-xs text-gray-500 mt-2 text-center">By clicking the button, you agree to Fiverr's <a href="#" className="underline">Terms of Service</a> and <a href="#" className="underline">Payment Terms</a></p>
