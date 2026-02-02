@@ -61,3 +61,9 @@ export type TBookingHireJob = {
     ngayThue: string;
     hoanThanh: boolean;
 };
+
+export type AxiosResponse<T> = {
+    content: T;
+    message: string;
+    statusCode: number;
+};
