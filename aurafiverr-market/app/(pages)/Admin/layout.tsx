@@ -4,6 +4,7 @@ import Sidebar from "@/app/components/admin/Sidebar";
 import AdminAuth from "@/app/components/admin/AdminAuth";
 import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
+import AdminHeader from "@/app/components/AdminHeader";
 
 export default function AdminLayout({
     children,
@@ -25,9 +26,12 @@ export default function AdminLayout({
     return (
         <div className="flex min-h-screen bg-linear-to-br from-slate-100 to-slate-200">
             <Sidebar />
-            <main className="ml-64 flex-1 p-8">
-                <AdminAuth>{children}</AdminAuth>
-            </main>
+            <div className="ml-64 flex-1">
+                <AdminHeader />
+                <main className="p-8">
+                    <AdminAuth>{children}</AdminAuth>
+                </main>
+            </div>
             <Toaster richColors position="top-right" />
         </div>
     );
