@@ -40,9 +40,7 @@ export default function DashboardStats() {
         async function loadStats() {
             try {
                 // Total users via paginated endpoint (read totalRow)
-                const uRes = await api.get(
-                    `/users/phan-trang-tim-kiem?pageIndex=1&pageSize=1&keyword=`
-                );
+                const uRes = await api.get(`/users/phan-trang-tim-kiem?pageIndex=1&pageSize=1&keyword=`);
                 const totalUsers = uRes.data.content?.totalRow ?? null;
                 setUsers(totalUsers);
 
@@ -130,7 +128,7 @@ export default function DashboardStats() {
     return (
         <SimpleGrid cols={3} spacing="sm">
             {card("Total Users", users)}
-            {card("Active Listings", listings)}
+            {card("Active Job Listings", listings)}
             {card("Total Bookings", bookings)}
         </SimpleGrid>
     );

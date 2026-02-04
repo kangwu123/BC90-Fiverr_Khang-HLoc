@@ -12,7 +12,6 @@ export default function AdminPage() {
             <div className="rounded-xl bg-white p-6 shadow">
                 <DashboardStats />
             </div>
-
         </div>
     );
 }
