@@ -1,5 +1,6 @@
 import JobActions from "./JobActions";
 import JobPagination from "./JobPagination";
+import api from '@/app/services/api';
 
 type Props = {
     keyword: string;
@@ -9,18 +10,9 @@ type Props = {
 export default async function JobTable({ keyword, page }: Props) {
     const pageSize = 10;
 
-    const res = await fetch(
-        `https://fiverrnew.cybersoft.edu.vn/api/cong-viec`,
-        {
-            headers: {
-                TokenCybersoft:
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA5MCIsIkhldEhhblN0cmluZyI6IjI5LzA1LzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc4MDAxMjgwMDAwMCIsIm5iZiI6MTc1MzAzMDgwMCwiZXhwIjoxNzgwMTYwNDAwfQ.KkGRtLpEsgoM4M_TapjOZIzvAwbay3QvXIwwN8XUqWk",
-            },
-            cache: "no-store",
-        }
-    );
+    const res = await api.get(`/cong-viec`);
 
-    const result = await res.json();
+    const result = await res.data;
 
     let jobs: any[] = [];
 
