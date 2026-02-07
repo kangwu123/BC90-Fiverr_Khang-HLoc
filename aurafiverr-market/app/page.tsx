@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import WOW from "wowjs/dist/wow";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
@@ -25,7 +24,6 @@ import {
 import HomeHeader from "./components/HomeHeader";
 import HomeFooter from "./components/HomeFooter";
 import BackToTopButton from "./components/BackToTop";
-//import DestinationBar from "./(pages)/destinationBar";
 import SocialMedia from "./components/SocialMedia";
 import StickyNav from "./components/StickyNav";
 
@@ -44,15 +42,6 @@ export default function Home() {
     { name: "Music & Audio", icon: <AudioOutlined className="text-3xl" /> },
     { name: "Business", icon: <ShopOutlined className="text-3xl" /> },
     { name: "Data", icon: <AuditOutlined className="text-3xl" /> },
-  ];
-
-  const popularServices = [
-    { name: "Book Design", image: "/img/popular/book-design.png" },
-    { name: "UGC Videos", image: "/img/popular/ugc-videos.png" },
-    { name: "Voice Over", image: "/img/popular/voice-over.png" },
-    { name: "Social Media Marketing", image: "/img/popular/smm.png" },
-    { name: "AI Development", image: "/img/popular/ai-dev.png" },
-    { name: "Logo Design", image: "/img/popular/logo-design.png" },
   ];
 
   const professionalServices = [
@@ -211,10 +200,6 @@ export default function Home() {
 
     const t = setTimeout(() => setSplashDone(true), 80);
 
-    const header = document.querySelector("header");
-    if (header) {
-    }
-
     return () => {
       clearTimeout(t);
       wow = null;
@@ -348,7 +333,7 @@ export default function Home() {
               Popular Professional Services
             </h2>
 
-            <div className="max-w-6xl mx-auto relative">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
               <Swiper
                 modules={[Navigation, Pagination]}
                 navigation={{
@@ -356,14 +341,9 @@ export default function Home() {
                   prevEl: ".prof-prev",
                 }}
                 pagination={{ clickable: true }}
+                slidesPerView={4}
                 spaceBetween={20}
-                breakpoints={{
-                  320: { slidesPerView: 1.2, centeredSlides: true, spaceBetween: 16, loop: true },
-                  640: { slidesPerView: 2.5 },
-                  768: { slidesPerView: 3 },
-                  1024: { slidesPerView: 4 },
-                  1280: { slidesPerView: 5, centeredSlides: false, loop: false },
-                }}
+                loop={true}
                 className="professional-services-slider"
               >
                 {professionalServices.map((service) => (
@@ -378,10 +358,10 @@ export default function Home() {
                   </SwiperSlide>
                 ))}
               </Swiper>
-              <div className="prof-prev absolute top-1/2 -translate-y-1/2 -left-10 z-10 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
+              <div className="prof-prev absolute top-1/2 -translate-y-1/2 left-2 z-20 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               </div>
-              <div className="prof-next absolute top-1/2 -translate-y-1/2 -right-10 z-10 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
+              <div className="prof-next absolute top-1/2 -translate-y-1/2 right-2 z-20 cursor-pointer bg-yellow-400 shadow-md rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-500 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </div>
             </div>
