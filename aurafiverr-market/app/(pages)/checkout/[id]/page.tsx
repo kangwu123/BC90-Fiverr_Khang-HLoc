@@ -55,7 +55,7 @@ const CheckoutPage = () => {
                 await hireJob(hireData);
                 window.dispatchEvent(new CustomEvent("JOB_HIRED_SUCCESS"));
                 alert("Payment successful!");
-                router.push("/Listing");
+                router.push("/");
             } catch (error) {
                 console.error("Failed to hire job:", error);
                 alert("Payment failed. Please try again.");
