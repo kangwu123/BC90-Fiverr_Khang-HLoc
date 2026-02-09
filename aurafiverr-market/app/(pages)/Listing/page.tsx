@@ -12,14 +12,16 @@ import EditProfilePopUp from "./editProfile";
 import LinkedAccounts from "./LinkedAccounts";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import JobTablecclient from "./JobTablecclient";
 
 const ListingPage = () => {
   const router = useRouter();
   const [user, setUser] = useState<TUser | null>(null);
-  const [hiredBookingJobs, setHiredBookingJobs] = useState<TBookingHireJob[]>([]);
+  const [hiredBookingJobs, setHiredBookingJobs] = useState<TBookingHireJob[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
-
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -36,7 +38,7 @@ const ListingPage = () => {
       setUser(currentUser);
 
       const res = await api.get<{ content: TBookingHireJob[] }>(
-        `/thue-cong-viec/lay-danh-sach-da-thue`
+        `/thue-cong-viec/lay-danh-sach-da-thue`,
       );
       setHiredBookingJobs(res.data.content);
     } finally {
@@ -107,9 +109,11 @@ const ListingPage = () => {
       <div className="bg-white min-h-screen">
         <HomeHeader />
         <main className="flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 py-16 sm:py-20 text-center">
-
           <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-50 rounded-full flex items-center justify-center mb-5 sm:mb-6">
-            <FontAwesomeIcon icon={faUserLock} className="text-2xl sm:text-3xl text-gray-400" />
+            <FontAwesomeIcon
+              icon={faUserLock}
+              className="text-2xl sm:text-3xl text-gray-400"
+            />
           </div>
 
           <h2 className="font-extrabold text-amber-700 mb-3 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
@@ -123,11 +127,12 @@ const ListingPage = () => {
           <button
             onClick={() =>
               window.dispatchEvent(
-                new CustomEvent("OPEN_AUTH_MODAL", { detail: { mode: "login" } })
+                new CustomEvent("OPEN_AUTH_MODAL", {
+                  detail: { mode: "login" },
+                }),
               )
             }
-            className="px-8 sm:px-10 py-3 sm:py-4 bg-linear-to-br from-[#F0944D] to-[#ACCAD5] text-black rounded-2xl font-bold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:brightness-110 active:scale-95 cursor-pointer"
-          >
+            className="px-8 sm:px-10 py-3 sm:py-4 bg-linear-to-br from-[#F0944D] to-[#ACCAD5] text-black rounded-2xl font-bold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:brightness-110 active:scale-95 cursor-pointer">
             Login Now
           </button>
         </main>
@@ -148,27 +153,43 @@ const ListingPage = () => {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
                 <div className="relative w-32 h-32 mx-auto mb-4">
-                  <img src={user?.avatar || "/img/avatarLogo.jpg"} alt="User Avatar" style={{ objectFit: 'cover' }}
+                  <img
+                    src={user?.avatar || "/img/avatarLogo.jpg"}
+                    alt="User Avatar"
+                    style={{ objectFit: "cover" }}
                     className="rounded-full"
                   />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800">{user?.name}</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {user?.name}
+                </h2>
                 <p className="text-sm text-gray-500">PREMIUM ACCOUNT</p>
                 <div className="mt-6 text-left space-y-4">
                   <div>
-                    <p className="text-xs font-semibold text-gray-400">EMAIL ADDRESS</p>
-                    <p className="text-gray-800 wrap-break-words">{user?.email}</p>
+                    <p className="text-xs font-semibold text-gray-400">
+                      EMAIL ADDRESS
+                    </p>
+                    <p className="text-gray-800 wrap-break-words">
+                      {user?.email}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-gray-400">PHONE NUMBER</p>
+                    <p className="text-xs font-semibold text-gray-400">
+                      PHONE NUMBER
+                    </p>
                     <p className="text-gray-800">{user?.phone || "N/A"}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-gray-400">GENDER</p>
-                    <p className="text-gray-800">{user?.gender ? "Male" : "Female"}</p>
+                    <p className="text-xs font-semibold text-gray-400">
+                      GENDER
+                    </p>
+                    <p className="text-gray-800">
+                      {user?.gender ? "Male" : "Female"}
+                    </p>
                   </div>
                 </div>
-                <button onClick={handleEditProfile}
+                <button
+                  onClick={handleEditProfile}
                   className="mt-8 w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-full hover:bg-gray-700 transition-colors">
                   Edit Profile
                 </button>
@@ -186,8 +207,7 @@ const ListingPage = () => {
                     {hiredBookingJobs.map((job) => (
                       <div
                         key={job.id}
-                        className="flex items-center space-x-4 border-b pb-4"
-                      >
+                        className="flex items-center space-x-4 border-b pb-4">
                         <img
                           src={job.congViec.hinhAnh}
                           alt={job.congViec.tenCongViec}
@@ -210,14 +230,12 @@ const ListingPage = () => {
                               onClick={() =>
                                 router.push(`/detail/${job.congViec.id}`)
                               }
-                              className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-green-600"
-                            >
+                              className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-green-600">
                               View detail
                             </button>
                             <button
                               onClick={() => handleDeleteJob(job.id)}
-                              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                            >
+                              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
                               DEL
                             </button>
                           </div>
@@ -226,7 +244,8 @@ const ListingPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <p>No jobs posted yet.</p>
+                  // <p>No jobs posted yet.</p>
+                  <JobTablecclient keyword="" page={1} />
                 )}
               </div>
             </div>
