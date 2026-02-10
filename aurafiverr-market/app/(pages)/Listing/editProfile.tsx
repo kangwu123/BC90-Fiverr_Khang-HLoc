@@ -16,6 +16,8 @@ const EditProfilePopUp = ({ userId, onClose, onUpdateSuccess }: Props) => {
         phone: "",
         birthday: "",
         gender: true,
+        skill: [],
+        certification: [],
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -77,7 +79,7 @@ const EditProfilePopUp = ({ userId, onClose, onUpdateSuccess }: Props) => {
     };
 
     return (
-        <div className="fixed inset-0 z-10 flex items-center justify-center py-4 sm:py-6 overflow-y-auto">
+        <div className="fixed inset-0 z-10 flex items-center justify-center py-2 sm:py-6 overflow-y-auto">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose}></div>
 
             <div className="relative py-2 bg-white w-full max-w-[98%] sm:max-w-120 md:max-w-150 lg:max-w-2xl xl:max-w-3xl rounded-2xl sm:rounded-4xladow-2xl flex flex-col max-h-[95vh] animate-in fade-in zoom-in duration-300">
@@ -89,13 +91,13 @@ const EditProfilePopUp = ({ userId, onClose, onUpdateSuccess }: Props) => {
                     <i className="fa-solid fa-xmark text-lg sm:text-xl"></i>
                 </button>
 
-                <div className="p-4 sm:p-6 md:p-8 lg:p-10 overflow-y-auto">
+                <div className="p-2 sm:p-4 md:p-2 lg:p-4 overflow-y-auto">
                     <div className="mb-4 sm:mb-6 md:mb-8">
                         <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-gray-900">Edit Profile</h2>
                         <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase mt-0.5">Update your personal information</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-3 md:space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
                             <div>
                                 <label className="block text-[10px] font-black uppercase text-gray-400 mb-1 ml-1">Full Name</label>
@@ -156,6 +158,28 @@ const EditProfilePopUp = ({ userId, onClose, onUpdateSuccess }: Props) => {
                                     className={`flex-1 py-2.5 sm:py-3 md:py-4 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm md:text-base transition-all cursor-pointer active:scale-95 ${!formData.gender ? 'bg-[#47242B] text-white shadow-md' : 'bg-gray-100 text-gray-500'}`}
                                 > Female </button>
                             </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-black uppercase text-gray-400 mb-1 ml-1">Skills</label>
+                            <input
+                                type="text"
+                                className="w-full p-2.5 sm:p-3 md:p-4 bg-gray-50 border text-sm rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none transition-all border-transparent"
+                                value={formData.skill?.join(', ')}
+                                onChange={(e) => setFormData({ ...formData, skill: e.target.value.split(',').map(s => s.trim()) })}
+                                placeholder="e.g. HTML, CSS, JavaScript"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-black uppercase text-gray-400 mb-1 ml-1">Certifications</label>
+                            <input
+                                type="text"
+                                className="w-full p-2.5 sm:p-3 md:p-4 bg-gray-50 border text-sm rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none transition-all border-transparent"
+                                value={formData.certification?.join(', ')}
+                                onChange={(e) => setFormData({ ...formData, certification: e.target.value.split(',').map(c => c.trim()) })}
+                                placeholder="e.g. AWS Certified Solutions Architect"
+                            />
                         </div>
 
                         <div className="pt-2 sm:pt-4">

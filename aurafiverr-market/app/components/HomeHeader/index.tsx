@@ -298,7 +298,7 @@ const HomeHeader = ({
                         <Link href="/Listing" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "/Listing" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
                             Listing
                         </Link>
-                        <Link href="/seller" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "/seller" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
+                        <Link href="#" className={`px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-105 ${pathname === "/seller" ? "bg-black text-white shadow" : "text-gray-700 hover:bg-black/5"}`}>
                             Become a Seller
                         </Link>
                     </motion.div>

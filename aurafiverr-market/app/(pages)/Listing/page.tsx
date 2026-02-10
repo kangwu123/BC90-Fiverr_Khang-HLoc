@@ -1,72 +1,42 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
-import { TBookingHireJob, TUser } from "@/app/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserLock } from "@fortawesome/free-solid-svg-icons";
+
+import HomeFooter from "@/app/components/HomeFooter";
 import HomeHeader from "@/app/components/HomeHeader";
+import api from "@/app/services/api";
+import { TBookingHireJobViewModel, TUser } from "@/app/types";
+import React, { useEffect, useState, useCallback } from "react";
+import EditProfilePopUp from "./editProfile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera, faUserLock } from "@fortawesome/free-solid-svg-icons";
+import Loading from "@/app/components/_Loading/Loading";
+import Toast from "@/app/components/_Toast/Toast";
+import LinkedAccounts from "./LinkedAccounts";
 import StickyNav from "@/app/components/StickyNav";
 import BackToTopButton from "@/app/components/BackToTop";
-import HomeFooter from "@/app/components/HomeFooter";
-import api from "@/app/services/api";
-import EditProfilePopUp from "./editProfile";
-import LinkedAccounts from "./LinkedAccounts";
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 import { useRouter } from "next/navigation";
 
-const ListingPage = () => {
+const Listing = () => {
   const router = useRouter();
   const [user, setUser] = useState<TUser | null>(null);
-  const [hiredBookingJobs, setHiredBookingJobs] = useState<TBookingHireJob[]>([]);
+  const [hiredBookingJobs, setHiredBookingJobs] = useState<TBookingHireJobViewModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [toastOpen, setToastOpen] = useState(false);
 
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const raw = localStorage.getItem("USER_LOGIN");
-      if (!raw) {
-        setUser(null);
-        setHiredBookingJobs([]);
-        return;
-      }
-      const parsed = JSON.parse(raw);
-      const currentUser = parsed?.content?.user;
-      if (!currentUser?.id) return;
-      setUser(currentUser);
-
-      const res = await api.get<{ content: TBookingHireJob[] }>(
-        `/thue-cong-viec/lay-danh-sach-da-thue`
-      );
-      setHiredBookingJobs(res.data.content);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-    window.addEventListener("LOGIN_SUCCESS", fetchData);
-    return () => window.removeEventListener("LOGIN_SUCCESS", fetchData);
-  }, [fetchData]);
-
-  const handleEditProfile = async () => {
-    try {
-      const raw = localStorage.getItem("USER_LOGIN");
-      if (!raw) {
-        setUser(null);
-        setHiredBookingJobs([]);
-        return;
-      }
-      const parsed = JSON.parse(raw);
-      const currentUser = parsed?.content?.user;
-      if (!currentUser?.id) return;
-      setUser(currentUser);
-      await api.get(`/user/${currentUser.id}`);
-    } catch (error) {
-      console.log(error);
-    }
-    setIsEditOpen(true);
+  const JobHiredPriceTotal = () => {
+    // Calculate total price of hired jobs including service fee per job
+    let total = 0;
+    hiredBookingJobs.forEach((job) => {
+      const price = Number(job.giaTien) || 0;
+      let feeRate = 0.1; // default 10%
+      if (job.tenCongViec === 'Premium') feeRate = 0.2;
+      else if (job.tenCongViec === 'Standard') feeRate = 0.3;
+      // If specific labels like 'Basic' are used, keep default 0.1
+      const fee = price * feeRate;
+      total += price + fee;
+    });
+    return total;
   };
 
   const handleDeleteJob = async (jobId: number) => {
@@ -91,14 +61,131 @@ const ListingPage = () => {
     });
   };
 
-  if (loading) {
+  const renderBookingHireJobs = (item: TBookingHireJobViewModel) => {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="relative w-14 h-14">
-          <div className="absolute inset-0 border-4 border-gray-100 rounded-full" />
-          <div className="absolute inset-0 border-4 border-rose-500 rounded-full animate-spin border-t-transparent" />
+      <div key={item.id} className="border border-gray-200 rounded-2xl p-4 sm:p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
+        <div className="flex items-start gap-4 sm:gap-6">
+          {/* Image */}
+          <img
+            src={item.hinhAnh}
+            alt={String(item.tenCongViec)}
+            className="w-28 sm:w-36 h-20 sm:h-24 object-cover rounded-xl shrink-0"
+          />
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <h4 className="font-bold text-gray-900 text-sm sm:text-base">
+              {item.tenCongViec}
+            </h4>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2 line-clamp-2">
+              {item.moTaNgan}
+            </p>
+          </div>
+
+          {/* Price and Actions - Pushed to Right */}
+          <div className="flex flex-col items-end justify-start gap-2 sm:gap-3 shrink-0 ml-4">
+            <p className="font-bold text-base sm:text-lg text-gray-900">
+              ${item.giaTien}
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => router.push(`/detail/${item.id}`)}
+                className="bg-green-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-xs sm:text-sm font-medium"
+              >
+                View detail
+              </button>
+              <button
+                onClick={() => {
+                  // Handle delete
+                  handleDeleteJob(item.id);
+                }}
+                className="bg-red-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-xs sm:text-sm font-medium"
+              >
+                DEL
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+    );
+  };
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const raw = localStorage.getItem("USER_LOGIN");
+      if (!raw) {
+        setUser(null);
+        setHiredBookingJobs([]);
+        return;
+      }
+
+      const parsed = JSON.parse(raw);
+      const currentUser = parsed?.content?.user;
+      if (!currentUser?.id) return;
+
+      setUser(currentUser);
+
+      const res = await api.get(`thue-cong-viec/lay-danh-sach-da-thue`);
+      const list: TBookingHireJobViewModel[] = res.data.content || [];
+
+      setHiredBookingJobs(list);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+    window.addEventListener("LOGIN_SUCCESS", fetchData);
+    return () => window.removeEventListener("LOGIN_SUCCESS", fetchData);
+  }, [fetchData]);
+
+  const handleEditProfile = async () => {
+    try {
+      const raw = localStorage.getItem("USER_LOGIN");
+      if (!raw) {
+        setUser(null);
+        setHiredBookingJobs([]);
+        return;
+      }
+      const parsed = JSON.parse(raw);
+      const currentUser = parsed?.content?.user;
+      if (!currentUser?.id) return;
+      setUser(currentUser);
+      await api.get(`users/${currentUser.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsEditOpen(true);
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("formFile", file);
+
+      try {
+        const res = await api.post("/users/upload-avatar", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        if (res.data.content) {
+          fetchData();
+          Swal.fire("Avatar updated successfully!", "", "success");
+        }
+      } catch (error) {
+        console.error("Failed to upload avatar", error);
+        Swal.fire("Failed to upload avatar", "", "error");
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <Loading />
     );
   }
 
@@ -142,18 +229,30 @@ const ListingPage = () => {
       <HomeHeader />
       <StickyNav headerHeight={140} />
 
-      <div className="container mx-auto px-2 py-10">
-        <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+      <main className="container mx-auto px-60 py-10 md:py-10">
+        <div className=" container mx-auto py-12 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 xl:gap-14">
+          <aside className="w-full lg:w-75 xl:w-87.5 shrink-0">
             <div className="lg:col-span-1">
               <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
                 <div className="relative w-32 h-32 mx-auto mb-4">
                   <img src={user?.avatar || "/img/avatarLogo.jpg"} alt="User Avatar" style={{ objectFit: 'cover' }}
                     className="rounded-full"
                   />
+                  <input
+                    type="file"
+                    id="avatar-upload"
+                    className="hidden"
+                    onChange={handleAvatarChange}
+                  />
+                  <label
+                    htmlFor="avatar-upload"
+                    className="absolute bottom-0 right-0 bg-gray-800 text-white rounded-full p-2 cursor-pointer hover:bg-gray-700"
+                  >
+                    <FontAwesomeIcon icon={faCamera} />
+                  </label>
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800">{user?.name}</h2>
-                <p className="text-sm text-gray-500">PREMIUM ACCOUNT</p>
+                <p className="text-sm text-gray-500">BASIC ACCOUNT</p>
                 <div className="mt-6 text-left space-y-4">
                   <div>
                     <p className="text-xs font-semibold text-gray-400">EMAIL ADDRESS</p>
@@ -175,82 +274,56 @@ const ListingPage = () => {
               </div>
               <LinkedAccounts />
             </div>
+          </aside>
 
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
-                  My Posted Jobs
-                </h3>
-                {hiredBookingJobs.length > 0 ? (
-                  <div className="space-y-6">
-                    {hiredBookingJobs.map((job) => (
-                      <div
-                        key={job.id}
-                        className="flex items-center space-x-4 border-b pb-4"
-                      >
-                        <img
-                          src={job.congViec.hinhAnh}
-                          alt={job.congViec.tenCongViec}
-                          className="w-32 h-20 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-bold text-gray-800">
-                            {job.congViec.tenCongViec}
-                          </h4>
-                          <p className="text-sm text-gray-500">
-                            {job.congViec.moTaNgan}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-lg text-gray-800">
-                            ${job.congViec.giaTien}
-                          </p>
-                          <div className="flex mt-2">
-                            <button
-                              onClick={() =>
-                                router.push(`/detail/${job.congViec.id}`)
-                              }
-                              className="bg-green-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-green-600"
-                            >
-                              View detail
-                            </button>
-                            <button
-                              onClick={() => handleDeleteJob(job.id)}
-                              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                            >
-                              DEL
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>No jobs posted yet.</p>
-                )}
-              </div>
+          <section className="w-full lg:w-[70%]">
+            <div className="mb-8">
+              <h1 className="text-3xl md:text-4xl xl:text-5xl font-black">
+                Booking History
+              </h1>
+              <p className="text-gray-500 mt-2">
+                You have {hiredBookingJobs.length} Job Hired
+              </p>
             </div>
-          </div>
+
+            <div className="grid gap-6 md:gap-8">
+              {/* Call the arrow function here */}
+              {hiredBookingJobs.map((item) => renderBookingHireJobs(item))}
+            </div>
+          </section>
         </div>
-      </div>
+      </main>
 
-      <div className="relative bg-white">
-        <BackToTopButton />
-        <HomeFooter />
-      </div>
-
-      {isEditOpen && user && (
+      {isEditOpen && (
         <EditProfilePopUp
           userId={user.id}
           onClose={() => setIsEditOpen(false)}
           onUpdateSuccess={() => {
             fetchData();
-            setIsEditOpen(false);
+            setToastOpen(true);
           }}
         />
       )}
+
+      <Toast
+        open={toastOpen}
+        onClose={() => setToastOpen(false)}
+        type="success"
+      >
+        <div>
+          <p className="font-bold text-sm">Profile updated</p>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Your information has been saved successfully
+          </p>
+        </div>
+      </Toast>
+
+      <div className="relative bg-white">
+        <BackToTopButton />
+        <HomeFooter />
+      </div>
     </div>
   );
 };
 
-export default ListingPage;
+export default Listing;
