@@ -259,7 +259,6 @@ const Listing = () => {
           Swal.fire("Avatar updated successfully!", "", "success");
         }
       } catch (error) {
-        console.error("Failed to upload avatar", error);
         Swal.fire("Failed to upload avatar", "", "error");
       }
     }
