@@ -1,15 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/app/services/api";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function AdminLoginPage() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+
+    useEffect(() => {
+        const getCookie = (name: string): string | undefined => {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            }
+            return undefined;
+        };
+
+        const rememberedEmail = getCookie('remembered_email');
+        const rememberedPassword = getCookie('remembered_password');
+
+        if (rememberedEmail) {
+            setEmail(rememberedEmail);
+            if (rememberedPassword) {
+                setPassword(rememberedPassword);
+            }
+            setRememberMe(true);
+        }
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,6 +69,20 @@ export default function AdminLoginPage() {
                 token: token,
             };
 
+            if (rememberMe) {
+                document.cookie = `remembered_email=${encodeURIComponent(
+                    email
+                )}; path=/`;
+                document.cookie = `remembered_password=${encodeURIComponent(
+                    password
+                )}; path=/`;
+            } else {
+                document.cookie =
+                    "remembered_email=; max-age=0; path=/";
+                document.cookie =
+                    "remembered_password=; max-age=0; path=/";
+            }
+
             localStorage.setItem("USER_ADMIN", JSON.stringify(store));
 
             window.dispatchEvent(new Event("adminAuthChanged"));
@@ -57,69 +98,89 @@ export default function AdminLoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-100">
-            <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
-
-                {/* Header */}
-                <div className="mb-6 text-center">
-                    <h2 className="text-2xl font-semibold text-slate-800">
-                        Admin Sign In
-                    </h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                        Đăng nhập để quản lý hệ thống
+        <div
+            className="flex min-h-screen items-center justify-center bg-cover bg-center"
+            style={{
+                backgroundImage:
+                    "url('https://images.pexels.com/photos/1430677/pexels-photo-1430677.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+            }}
+        >
+            <div className="absolute inset-0 bg-black/50"></div>
+            <div className="relative z-10 w-full max-w-md rounded-2xl bg-white/10 p-8 text-white backdrop-blur-lg">
+                <div className="mb-8 text-center">
+                    <h2 className="text-3xl font-bold">Login Admin</h2>
+                    <p className="mt-2 text-white/80">
+                        Sign in to your account
                     </p>
                 </div>
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-slate-600">
-                            Email
-                        </label>
                         <input
                             type="email"
                             required
-                            placeholder="admin@email.com"
+                            placeholder="Email Address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm
-                     focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+                            className="w-full rounded-lg border-none bg-white/20 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
                         />
                     </div>
 
-                    <div>
-                        <label className="mb-1 block text-sm font-medium text-slate-600">
-                            Password
-                        </label>
+                    <div className="relative">
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             required
-                            placeholder="••••••••"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm
-                     focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+                            className="w-full rounded-lg border-none bg-white/20 px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 flex items-center pr-3 text-white/60 hover:text-white"
+                        >
+                            {showPassword ? (
+                                <EyeOff size={20} />
+                            ) : (
+                                <Eye size={20} />
+                            )}
+                        </button>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="remember-me"
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) =>
+                                    setRememberMe(e.target.checked)
+                                }
+                                className="h-4 w-4 rounded border-gray-300 bg-white/20 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            <label
+                                htmlFor="remember-me"
+                                className="ml-2 block text-sm text-white/80"
+                            >
+                                Remember me
+                            </label>
+                        </div>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`mt-2 w-full rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition
-                           ${loading
-                                ? "bg-emerald-300 cursor-not-allowed"
-                                : "bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98]"
-                            }`}
-                    >
-                        {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+                        className={`w-full rounded-lg bg-linear-to-r from-blue-500 to-purple-600 px-4 py-3 font-semibold text-white transition-opacity
+                                ${loading
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:opacity-90"
+                            }`}>
+                        {loading ? "Signing In..." : "Sign In"}
                     </button>
                 </form>
-
-                <div className="mt-6 text-center text-xs text-slate-400">
-                    © 2026 Admin Panel
-                </div>
             </div>
         </div>
-
     );
 }
