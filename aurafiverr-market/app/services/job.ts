@@ -1,5 +1,5 @@
 import api from "./api";
-
+import { TBookingHireJobApi } from "@/app/types";
 // Lấy menu loại công việc
 export const getJobMenu = async () => {
     const response = await api.get("cong-viec/lay-menu-loai-cong-viec");
@@ -41,7 +41,7 @@ export const hireJob = async (data: any) => {
     return response.data;
 };
 
-export const getHiredJobs = async () => {
+export const getHiredJobs = async (): Promise<TBookingHireJobApi[]> => {
     const response = await api.get("thue-cong-viec/lay-danh-sach-da-thue");
-    return response.data;
+    return response.data.content;
 };

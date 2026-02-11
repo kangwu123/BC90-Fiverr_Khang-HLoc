@@ -68,9 +68,26 @@ export type AxiosResponse<T> = {
     statusCode: number;
 };
 
+export interface TBookingHireJobApi {
+    id: number;
+    maCongViec: number;
+    maNguoiThue: number;
+    ngayThue: string;
+    hoanThanh: boolean;
+    congViec: {
+        tenCongViec: string;
+        danhGia: number;
+        giaTien: number;
+        hinhAnh: string;
+        moTa: string;
+        moTaNgan: string;
+        saoCongViec: number;
+    };
+}
 export interface TBookingHireJobViewModel {
     id: number;
-    tenCongViec: TCongViec['tenCongViec'];
+    maNguoiThue: number;
+    tenCongViec: string;
     danhGia: number;
     giaTien: number;
     hinhAnh: string;
