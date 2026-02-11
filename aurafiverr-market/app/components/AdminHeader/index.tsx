@@ -62,6 +62,8 @@ export default function AdminHeader({
                 } catch { }
 
                 localStorage.removeItem("USER_ADMIN");
+                document.cookie = "remembered_email=; max-age=0; path=/";
+                document.cookie = "remembered_password=; max-age=0; path=/";
                 setAdminUser(null);
                 toast.success("Logged out successfully");
                 router.push("/Admin/login");
