@@ -3,11 +3,11 @@
 import HomeFooter from "@/app/components/HomeFooter";
 import HomeHeader from "@/app/components/HomeHeader";
 import api from "@/app/services/api";
-import { TBookingHireJobViewModel, TUser } from "@/app/types";
+import { TBookingHireJobViewModel, TBookingHireJobApi, TUser } from "@/app/types";
 import React, { useEffect, useState, useCallback } from "react";
 import EditProfilePopUp from "./editProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faUserLock } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faUserLock, faStar } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/app/components/_Loading/Loading";
 import Toast from "@/app/components/_Toast/Toast";
 import LinkedAccounts from "./LinkedAccounts";
@@ -24,19 +24,23 @@ const Listing = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
 
+  const calculatePrice = (job: TBookingHireJobViewModel) => {
+    const price = Number(job.giaTien) || 0;
+    const feeRates: { [key: string]: number } = {
+      Premium: 0.2,
+      Standard: 0.3,
+    };
+    const feeRate = feeRates[job.tenCongViec] || 0.1; // Default 10%
+    const fee = price * feeRate;
+    return price + fee;
+  };
+
   const JobHiredPriceTotal = () => {
     // Calculate total price of hired jobs including service fee per job
-    let total = 0;
-    hiredBookingJobs.forEach((job) => {
-      const price = Number(job.giaTien) || 0;
-      let feeRate = 0.1; // default 10%
-      if (job.tenCongViec === 'Premium') feeRate = 0.2;
-      else if (job.tenCongViec === 'Standard') feeRate = 0.3;
-      // If specific labels like 'Basic' are used, keep default 0.1
-      const fee = price * feeRate;
-      total += price + fee;
-    });
-    return total;
+    return hiredBookingJobs.reduce(
+      (total, job) => total + calculatePrice(job),
+      0
+    );
   };
 
   const handleDeleteJob = async (jobId: number) => {
@@ -77,6 +81,11 @@ const Listing = () => {
             <h4 className="font-bold text-gray-900 text-sm sm:text-base">
               {item.tenCongViec}
             </h4>
+            <div className="flex items-center gap-1 text-sm text-amber-500 mt-1">
+              <FontAwesomeIcon icon={faStar} />
+              <span className="font-bold text-gray-700">{item.saoCongViec}</span>
+              <span className="text-gray-500">({item.danhGia})</span>
+            </div>
             <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2 line-clamp-2">
               {item.moTaNgan}
             </p>
@@ -85,7 +94,10 @@ const Listing = () => {
           {/* Price and Actions - Pushed to Right */}
           <div className="flex flex-col items-end justify-start gap-2 sm:gap-3 shrink-0 ml-4">
             <p className="font-bold text-base sm:text-lg text-gray-900">
-              ${item.giaTien}
+              After Fee: ${calculatePrice(item)}
+            </p>
+            <p className="text-sm text-gray-500">
+              Original: ${item.giaTien}
             </p>
             <div className="flex gap-2">
               <button
@@ -95,13 +107,10 @@ const Listing = () => {
                 View detail
               </button>
               <button
-                onClick={() => {
-                  // Handle delete
-                  handleDeleteJob(item.id);
-                }}
+                onClick={() => { handleDeleteJob(item.id); }}
                 className="bg-red-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-xs sm:text-sm font-medium"
               >
-                DEL
+                DELETE
               </button>
             </div>
           </div>
@@ -126,10 +135,83 @@ const Listing = () => {
 
       setUser(currentUser);
 
-      const res = await api.get(`thue-cong-viec/lay-danh-sach-da-thue`);
-      const list: TBookingHireJobViewModel[] = res.data.content || [];
+      const res = await api.get("thue-cong-viec/lay-danh-sach-da-thue");
 
-      setHiredBookingJobs(list);
+      // const apiList: TBookingHireJobApi[] = res.data.content || [];
+
+      // /* Backend already filters by login user */
+      // const myJobs = apiList;
+
+      /* MOCK DATA FOR TEST UI */
+      const apiList = [
+        {
+          id: 1,
+          maCongViec: 101,
+          maNguoiThue: 15,
+          ngayThue: "2026-02-01",
+          hoanThanh: true,
+
+          congViec: {
+            tenCongViec: "I will do modern line art logo design",
+            danhGia: 4,
+            giaTien: 17,
+            hinhAnh: "https://fiverrnew.cybersoft.edu.vn/images/cv2.jpg",
+            moTa: "Professional modern logo design",
+            moTaNgan: "Modern logo design service",
+            saoCongViec: 5
+          }
+        },
+
+        {
+          id: 2,
+          maCongViec: 102,
+          maNguoiThue: 15,
+          ngayThue: "2026-02-03",
+          hoanThanh: false,
+
+          congViec: {
+            tenCongViec: "I will setup shopping ads and fix google merchant",
+            danhGia: 5,
+            giaTien: 10,
+            hinhAnh: "https://fiverrnew.cybersoft.edu.vn/images/cv16.jpg",
+            moTa: "Setup Google shopping ads",
+            moTaNgan: "Fix merchant center",
+            saoCongViec: 4
+          }
+        }
+      ];
+
+      /* Map API → ViewModel */
+      // const mapped: TBookingHireJobViewModel[] = myJobs.map((job) => ({
+      //   id: job.id,
+      //   maNguoiThue: job.maNguoiThue,
+
+      //   tenCongViec: job.congViec.tenCongViec,
+      //   danhGia: job.congViec.danhGia,
+      //   giaTien: job.congViec.giaTien,
+      //   hinhAnh: job.congViec.hinhAnh,
+      //   moTa: job.congViec.moTa,
+      //   moTaNgan: job.congViec.moTaNgan,
+      //   saoCongViec: job.congViec.saoCongViec,
+      // }));
+      // setHiredBookingJobs(mapped);
+
+      /* Map to ViewModel */
+      const mapped = apiList.map((job) => ({
+        id: job.id,
+        maNguoiThue: job.maNguoiThue,
+
+        tenCongViec: job.congViec.tenCongViec,
+        danhGia: job.congViec.danhGia,
+        giaTien: job.congViec.giaTien,
+        hinhAnh: job.congViec.hinhAnh,
+        moTa: job.congViec.moTa,
+        moTaNgan: job.congViec.moTaNgan,
+        saoCongViec: job.congViec.saoCongViec,
+      }));
+      setHiredBookingJobs(mapped);
+    } catch (err) {
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -183,11 +265,7 @@ const Listing = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
+  if (loading) {return (<Loading />);}
 
   if (!user) {
     return (
@@ -218,8 +296,10 @@ const Listing = () => {
             Login Now
           </button>
         </main>
-
-        <HomeFooter />
+        <div className="relative bg-white">
+            <BackToTopButton /> 
+            <HomeFooter />
+        </div> 
       </div>
     );
   }
@@ -287,8 +367,23 @@ const Listing = () => {
             </div>
 
             <div className="grid gap-6 md:gap-8">
-              {/* Call the arrow function here */}
-              {hiredBookingJobs.map((item) => renderBookingHireJobs(item))}
+              {hiredBookingJobs.length === 0 && (
+                <p className="text-gray-500 text-center">
+                  You haven't hired any jobs yet.
+                </p>
+              )}
+              {hiredBookingJobs.map((item) =>
+                renderBookingHireJobs(item)
+              )}
+            </div>
+            <div className="mt-8 flex justify-end">
+              <div className="rounded-lg bg-linear-to-r from-amber-500 via-pink-500 to-purple-500 p-1 shadow-lg">
+                <div className="rounded-md bg-white px-8 py-4">
+                  <p className="text-xl font-bold text-gray-800">
+                    Total Price: ${JobHiredPriceTotal()}
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
         </div>
