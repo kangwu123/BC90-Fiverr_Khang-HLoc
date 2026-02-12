@@ -376,7 +376,7 @@ const HomeHeader = ({
                                 userLogin.content.user.role === "ADMIN" ? (
                                     <div className="flex flex-col gap-2 px-2 py-1 text-sm text-gray-700">
                                         <Link
-                                            href="/admin/dashboard"
+                                            href="/admin"
                                             onClick={() => { setDropdownOpen(false); }}
                                             className="w-full px-4 py-3 text-left cursor-pointer 
                             text-gray-700 hover:bg-amber-600 rounded-xl transition-all font-medium"
