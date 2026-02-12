@@ -116,7 +116,7 @@ export default function DashboardStats() {
                 {label}
             </Text>
 
-            <Group position="apart" align="center" mt="xs">
+            <Group justify="apart" align="center" mt="xs">
                 <Text size="xl" weight={700}>
                     {value == null ? "—" : <AnimatedNumber value={value} />}
                     {suffix}
