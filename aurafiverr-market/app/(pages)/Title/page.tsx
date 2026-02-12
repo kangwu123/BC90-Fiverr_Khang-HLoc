@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { getJobMenu } from "@/app/services/job";
 import HomeHeader from "@/app/components/HomeHeader";
 import BackToTopButton from "@/app/components/BackToTop";
@@ -8,7 +8,7 @@ import HomeFooter from "@/app/components/HomeFooter";
 import StickyNav from "@/app/components/StickyNav";
 import Link from "next/link";
 
-const TitlePage = () => {
+const TitleContent = () => {
     const searchParams = useSearchParams();
     const titleId = searchParams.get("id");
     const [title, setTitle] = useState<any>(null);
@@ -35,14 +35,15 @@ const TitlePage = () => {
     }, [titleId]);
 
     if (!title) {
-        return <div>Loading...</div>;
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="h-12 w-12 rounded-full border-4 border-slate-100 border-t-rose-500 animate-spin"></div>
+            </div>
+        )
     }
 
     return (
         <>
-            <HomeHeader />
-            <StickyNav headerHeight={140} />
-
             <div className="px-4 py-16 border rounded-md" style={{ backgroundColor: '#123d24' }}>
                 <div className="text-center text-white">
                     <p className="text-2xl mb-5">Designs to make you stand out</p>
@@ -137,13 +138,25 @@ const TitlePage = () => {
                     <button className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full">Children book illustration</button>
                 </div>
             </div>
+        </>
+    );
+}
 
+const TitlePage = () => {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="h-12 w-12 rounded-full border-4 border-slate-100 border-t-rose-500 animate-spin"></div>
+            </div>
+        }>
+            <HomeHeader />
+            <StickyNav headerHeight={140} />
+            <TitleContent />
             <div className="relative bg-white">
                 <BackToTopButton />
                 <HomeFooter />
             </div>
-        </>
-
+        </Suspense>
     );
 };
 
