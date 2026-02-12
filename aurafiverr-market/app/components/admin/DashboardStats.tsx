@@ -116,12 +116,13 @@ export default function DashboardStats() {
                 {label}
             </Text>
 
-            <Group justify="apart" align="center" mt="xs">
-                <Text size="xl" weight={700}>
-                    {value == null ? "—" : <AnimatedNumber value={value} />}
-                    {suffix}
-                </Text>
-            </Group>
+        <Group justify="space-between" align="center" mt="xs">
+           <Text size="xl" fw={700}>
+             {value === null ? "-" : <AnimatedNumber value={value} />}
+             {suffix}
+           </Text>
+        </Group>
+
         </Paper>
     );
 
