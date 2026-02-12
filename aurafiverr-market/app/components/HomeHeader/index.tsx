@@ -497,7 +497,7 @@ const HomeHeader = ({
                                     <FontAwesomeIcon icon={faGlobe} /> English
                                 </Link>
                                 <Link
-                                    href="#"
+                                    href="/listing"
                                     onClick={() => setIsMenuOpen(false)}
                                     className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "#" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
                                 >
@@ -505,7 +505,7 @@ const HomeHeader = ({
                                 </Link>
 
                                 <Link
-                                    href="/seller"
+                                    href="#"
                                     onClick={() => setIsMenuOpen(false)}
                                     className={`p-4 rounded-2xl font-semibold text-lg cursor-pointer transition-colors ${pathname === "/seller" ? "bg-[#C3DFE3] text-[#143944]" : "text-gray-700 hover:bg-gray-50"}`}
                                 >
