@@ -20,6 +20,7 @@ const Listing = () => {
   const router = useRouter();
   const [user, setUser] = useState<TUser | null>(null);
   const [hiredBookingJobs, setHiredBookingJobs] = useState<TBookingHireJobViewModel[]>([]);
+  // const [courses, setCourses] = useState<Course[]>(userData?.chiTietKhoaHocGhiDanh || [],);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
@@ -137,67 +138,13 @@ const Listing = () => {
 
       const res = await api.get("thue-cong-viec/lay-danh-sach-da-thue");
 
-      // const apiList: TBookingHireJobApi[] = res.data.content || [];
+      const apiList: TBookingHireJobApi[] = res.data.content || [];
 
-      // /* Backend already filters by login user */
-      // const myJobs = apiList;
-
-      /* MOCK DATA FOR TEST UI */
-      const apiList = [
-        {
-          id: 1,
-          maCongViec: 101,
-          maNguoiThue: 15,
-          ngayThue: "2026-02-01",
-          hoanThanh: true,
-
-          congViec: {
-            tenCongViec: "I will do modern line art logo design",
-            danhGia: 4,
-            giaTien: 17,
-            hinhAnh: "https://fiverrnew.cybersoft.edu.vn/images/cv2.jpg",
-            moTa: "Professional modern logo design",
-            moTaNgan: "Modern logo design service",
-            saoCongViec: 5
-          }
-        },
-
-        {
-          id: 2,
-          maCongViec: 102,
-          maNguoiThue: 15,
-          ngayThue: "2026-02-03",
-          hoanThanh: false,
-
-          congViec: {
-            tenCongViec: "I will setup shopping ads and fix google merchant",
-            danhGia: 5,
-            giaTien: 10,
-            hinhAnh: "https://fiverrnew.cybersoft.edu.vn/images/cv16.jpg",
-            moTa: "Setup Google shopping ads",
-            moTaNgan: "Fix merchant center",
-            saoCongViec: 4
-          }
-        }
-      ];
+      /* Backend already filters by login user */
+      const myJobs = apiList;
 
       /* Map API → ViewModel */
-      // const mapped: TBookingHireJobViewModel[] = myJobs.map((job) => ({
-      //   id: job.id,
-      //   maNguoiThue: job.maNguoiThue,
-
-      //   tenCongViec: job.congViec.tenCongViec,
-      //   danhGia: job.congViec.danhGia,
-      //   giaTien: job.congViec.giaTien,
-      //   hinhAnh: job.congViec.hinhAnh,
-      //   moTa: job.congViec.moTa,
-      //   moTaNgan: job.congViec.moTaNgan,
-      //   saoCongViec: job.congViec.saoCongViec,
-      // }));
-      // setHiredBookingJobs(mapped);
-
-      /* Map to ViewModel */
-      const mapped = apiList.map((job) => ({
+      const mapped: TBookingHireJobViewModel[] = myJobs.map((job) => ({
         id: job.id,
         maNguoiThue: job.maNguoiThue,
 
@@ -264,7 +211,7 @@ const Listing = () => {
     }
   };
 
-  if (loading) {return (<Loading />);}
+  if (loading) { return (<Loading />); }
 
   if (!user) {
     return (
@@ -296,9 +243,9 @@ const Listing = () => {
           </button>
         </main>
         <div className="relative bg-white">
-            <BackToTopButton /> 
-            <HomeFooter />
-        </div> 
+          <BackToTopButton />
+          <HomeFooter />
+        </div>
       </div>
     );
   }
