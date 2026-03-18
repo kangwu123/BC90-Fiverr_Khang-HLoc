@@ -5,6 +5,7 @@ import { getJobDetail, hireJob } from "@/app/services/job";
 import { TJobDetail } from "@/app/types";
 import HomeHeader from "@/app/components/HomeHeader";
 import HomeFooter from "@/app/components/HomeFooter";
+import Toast from "@/app/components/_Toast/Toast";
 
 const CheckoutPage = () => {
     const { id } = useParams();
@@ -13,6 +14,16 @@ const CheckoutPage = () => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<any>(null);
     const [paymentMethod, setPaymentMethod] = useState("card");
+    const [selectedBank, setSelectedBank] = useState("");
+    const [toast, setToast] = useState<{
+        open: boolean;
+        message: string;
+        type: "success" | "error" | "warning" | "info";
+    }>({
+        open: false,
+        message: "",
+        type: "info",
+    });
 
     // Initialize user from localStorage (only once)
     useEffect(() => {
@@ -54,11 +65,21 @@ const CheckoutPage = () => {
                 };
                 await hireJob(hireData);
                 window.dispatchEvent(new CustomEvent("JOB_HIRED_SUCCESS"));
-                alert("Payment successful!");
-                router.push("/");
+                setToast({
+                    open: true,
+                    message: "Payment successful!",
+                    type: "success",
+                });
+                setTimeout(() => {
+                    router.push("/");
+                }, 2500);
             } catch (error) {
                 console.error("Failed to hire job:", error);
-                alert("Payment failed. Please try again.");
+                setToast({
+                    open: true,
+                    message: "Payment failed. Please try again.",
+                    type: "error",
+                });
             }
         }
     }, [job, user, router]);
@@ -88,6 +109,13 @@ const CheckoutPage = () => {
     return (
         <>
             <HomeHeader />
+            <Toast
+                open={toast.open}
+                onClose={() => setToast({ ...toast, open: false })}
+                type={toast.type}
+            >
+                {toast.message}
+            </Toast>
             <div className="container mx-auto px-4 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
@@ -167,15 +195,22 @@ const CheckoutPage = () => {
                             </label>
                             {paymentMethod === "bank" && (
                                 <div className="p-4 border rounded-lg grid grid-cols-1 gap-4">
-                                    <select className="border p-2 rounded">
-                                        <option>Select Bank</option>
-                                        <option>ACB</option>
-                                        <option>Techcombank</option>
-                                        <option>Vietcombank</option>
-                                        <option>Sacombank</option>
-                                        <option>Agribank</option>
-                                        <option>BIDV</option>
-                                    </select>
+                                    <div className="flex justify-around">
+                                        <button onClick={() => setSelectedBank("ACB")} className={`p-2 rounded-lg ${selectedBank === "ACB" ? "bg-blue-500 text-white" : "bg-gray-200"}`}>ACB</button>
+                                        <button onClick={() => setSelectedBank("Momo")} className={`p-2 rounded-lg ${selectedBank === "Momo" ? "bg-pink-500 text-white" : "bg-gray-200"}`}>Momo</button>
+                                    </div>
+                                    {selectedBank === "ACB" && (
+                                        <div className="flex flex-col items-center">
+                                            <img src="/img/acb_qr.jpg" alt="ACB QR Code" className="w-64 h-64" />
+                                            <p className="mt-2 text-center">Scan this QR code to pay with ACB</p>
+                                        </div>
+                                    )}
+                                    {selectedBank === "Momo" && (
+                                        <div className="flex flex-col items-center">
+                                            <img src="/img/momo_qr.jpg" alt="Momo QR Code" className="w-50 h-64" />
+                                            <p className="mt-2 text-center">Scan this QR code to pay with Momo</p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                             <label className="flex items-center p-4 border rounded-lg cursor-pointer">
