@@ -307,8 +307,8 @@ export default function Home() {
                       <img src="/img/Trusted/google.svg" alt="Google" className="h-5" />
                       <img src="/img/Trusted/netflix.svg" alt="Netflix" className="h-5" />
                       <img src="/img/Trusted/pg.svg" alt="P&G" className="h-5" />
-                      <img src="/img/Trusted/paypal.svg" alt="PayPal" className="h-5" />
-                      <img src="/img/Trusted/payoneer.svg" alt="Payoneer" className="h-6" />
+                      <img src="/img/Trusted/Paypal.svg" alt="PayPal" className="h-5" />
+                      <img src="/img/Trusted/Payoneer.svg" alt="Payoneer" className="h-6" />
                     </div>
                   </div>
                 </SwiperSlide>
