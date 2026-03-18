@@ -407,8 +407,8 @@ export default function Home() {
                 </div>
                 <div className="w-full lg:w-1/2 mt-10 lg:mt-0">
                   <div className="relative">
-                    <video controls poster="/img/fiverrpro.mp4" className="rounded-lg w-full">
-                      <source src="/img/fiverrpro.mp4" type="video/mp4" />
+                    <video controls poster="/img/Fiverrpro.mp4" className="rounded-lg w-full">
+                      <source src="/img/Fiverrpro.mp4" type="video/mp4" />
                     </video>
                   </div>
                 </div>
