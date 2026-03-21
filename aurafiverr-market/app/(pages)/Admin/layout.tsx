@@ -6,6 +6,8 @@ import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
 import AdminHeader from "@/app/components/AdminHeader";
 import { useState, useEffect } from "react";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -40,10 +42,10 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             <Sidebar isCollapsed={isSidebarCollapsed} isMobile={isMobile} />
             <div
                 className={`flex-1 transition-all duration-300 ${isMobile
-                        ? "ml-0"
-                        : isSidebarCollapsed
-                            ? "ml-20"
-                            : "ml-64"
+                    ? "ml-0"
+                    : isSidebarCollapsed
+                        ? "ml-20"
+                        : "ml-64"
                     }`}
             >
                 <AdminHeader
@@ -81,8 +83,10 @@ export default function AdminLayout({
 
     return (
         <AdminAuth>
-            <AdminLayoutContent>{children}</AdminLayoutContent>
-            <Toaster richColors position="top-right" />
+            <MantineProvider>
+                <AdminLayoutContent>{children}</AdminLayoutContent>
+                <Toaster richColors position="top-right" />
+            </MantineProvider>
         </AdminAuth>
     );
 }
